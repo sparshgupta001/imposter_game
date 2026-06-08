@@ -83,8 +83,15 @@ export default function Home() {
 
       {/* Connection warning */}
       {!connected && (
-        <div className="mb-4 px-4 py-2 rounded-lg bg-red-500/10 border border-red-500/20 text-red-300 text-sm animate-fade-in">
-          Connecting to server...
+        <div className="mb-4 px-4 py-3 rounded-lg bg-red-500/10 border border-red-500/20 text-center animate-fade-in">
+          <p className="text-red-300 text-sm mb-2">Connecting to server...</p>
+          <p className="text-red-400/60 text-xs mb-2">Make sure you have internet access</p>
+          <button
+            onClick={() => window.location.reload()}
+            className="text-xs text-red-300 underline underline-offset-2 hover:text-white transition-colors"
+          >
+            Retry
+          </button>
         </div>
       )}
 

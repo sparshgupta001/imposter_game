@@ -21,11 +21,11 @@ export default function useSocket() {
     globalSocket = io(SERVER_URL, {
       autoConnect: true,
       reconnection: true,
-      reconnectionAttempts: 10,
+      reconnectionAttempts: Infinity,
       reconnectionDelay: 1000,
       reconnectionDelayMax: 5000,
-      timeout: 10000,
-      transports: ['websocket', 'polling'],
+      timeout: 20000,
+      transports: ['polling', 'websocket'],
     });
 
     return globalSocket;

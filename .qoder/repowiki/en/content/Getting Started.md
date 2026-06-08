@@ -3,257 +3,257 @@
 <cite>
 **Referenced Files in This Document**
 - [README.md](file://README.md)
+- [server/package.json](file://server/package.json)
+- [server/index.js](file://server/index.js)
+- [server/gameManager.js](file://server/gameManager.js)
+- [server/topics.js](file://server/topics.js)
 - [client/package.json](file://client/package.json)
 - [client/vite.config.js](file://client/vite.config.js)
 - [client/src/hooks/useSocket.js](file://client/src/hooks/useSocket.js)
 - [client/src/context/GameContext.jsx](file://client/src/context/GameContext.jsx)
 - [client/src/main.jsx](file://client/src/main.jsx)
-- [client/index.html](file://client/index.html)
 - [client/tailwind.config.js](file://client/tailwind.config.js)
-- [server/package.json](file://server/package.json)
-- [server/index.js](file://server/index.js)
-- [server/topics.js](file://server/topics.js)
+- [client/postcss.config.js](file://client/postcss.config.js)
+- [.gitignore](file://.gitignore)
 </cite>
 
 ## Table of Contents
 1. [Introduction](#introduction)
 2. [Prerequisites](#prerequisites)
 3. [Installation](#installation)
-4. [Development Setup](#development-setup)
-5. [Local Server and Client Startup](#local-server-and-client-startup)
-6. [Environment Variables](#environment-variables)
-7. [Accessing the Application Locally](#accessing-the-application-locally)
-8. [Development Workflow](#development-workflow)
-9. [Verification Steps](#verification-steps)
-10. [Expected Behavior During Development](#expected-behavior-during-development)
-11. [Troubleshooting Guide](#troubleshooting-guide)
-12. [Conclusion](#conclusion)
+4. [Environment Configuration](#environment-configuration)
+5. [Development Setup](#development-setup)
+6. [Accessing the Game Locally](#accessing-the-game-locally)
+7. [Testing Real-Time Functionality](#testing-real-time-functionality)
+8. [Deployment Options](#deployment-options)
+9. [Troubleshooting Guide](#troubleshooting-guide)
+10. [Verification Steps](#verification-steps)
+11. [Conclusion](#conclusion)
 
 ## Introduction
-This guide helps you set up and run the Imposter Game locally. It covers prerequisites, installation, environment configuration, and the complete development workflow so you can start playing and developing right away.
+Imposter Game is a real-time multiplayer bluffing game built with React, Vite, Tailwind CSS, Node.js, Express, and Socket.io. One player is secretly the imposter while others receive a shared topic. Players take turns giving one-word clues, discussing suspicions, voting, and revealing roles across multiple rounds. The game features in-memory state management, animated UI effects, and responsive real-time communication.
 
 ## Prerequisites
-- Node.js: The project requires Node.js to run both the server and client.
-- npm: Package manager for installing dependencies.
-- Git: Recommended for cloning the repository and managing changes.
+- Node.js: Version 18 or later is recommended for optimal compatibility with modern packages and toolchains.
+- npm: Node Package Manager that ships with Node.js.
+- Git: For cloning the repository and deploying to platforms like Railway and Vercel.
 
-These tools are standard for modern web development and are used throughout the project.
+These requirements are standard for running the React + Vite frontend and Node.js + Socket.io backend stack.
 
 **Section sources**
-- [README.md:5-25](file://README.md#L5-L25)
+- [README.md:82-86](file://README.md#L82-L86)
 
 ## Installation
-Follow these steps to install dependencies for both server and client:
+Follow these step-by-step instructions to install both server and client dependencies.
 
-1. Install server dependencies
-   - Navigate to the server directory and install dependencies.
-   - Command: `cd server && npm install`
+- Navigate to the server directory and install dependencies:
+  - Change directory to server: cd server
+  - Install server dependencies: npm install
 
-2. Install client dependencies
-   - Navigate to the client directory and install dependencies.
-   - Command: `cd ../client && npm install`
+- Navigate to the client directory and install dependencies:
+  - Change directory to client: cd ../client
+  - Install client dependencies: npm install
+
+- Verify installation:
+  - Both servers should report successful dependency resolution without errors.
+  - The client will install React, Vite, Tailwind CSS, Socket.io client, and confetti animations.
 
 Notes:
-- The server uses Node.js with Express and Socket.io.
-- The client uses React 18 with Vite and Tailwind CSS.
+- The server uses Express and Socket.io for real-time communication.
+- The client uses React 18 with Vite for fast development builds and Tailwind CSS for styling.
 
 **Section sources**
-- [README.md:7-14](file://README.md#L7-L14)
+- [README.md:7-23](file://README.md#L7-L23)
 - [server/package.json:1-16](file://server/package.json#L1-L16)
 - [client/package.json:1-26](file://client/package.json#L1-L26)
 
-## Development Setup
-After installing dependencies, you can start the development servers:
+## Environment Configuration
+Configure environment variables for both server and client to match your deployment targets.
 
-- Start the server (in one terminal):
-  - Navigate to the server directory and run the development script.
-  - Command: `cd server && npm run dev`
+- Server environment variables:
+  - PORT: The port the server listens on. Default is 3001. Example: PORT=3001
 
-- Start the client (in another terminal):
-  - Navigate to the client directory and run the development script.
-  - Command: `cd client && npm run dev`
+- Client environment variables:
+  - VITE_SERVER_URL: The Socket.io server URL that the client connects to. Default is http://localhost:3001. Example: VITE_SERVER_URL=https://your-railway-app.up.railway.app
 
-What happens:
-- The server runs on port 3001 by default.
-- The client runs on port 5173 by default.
-- The client proxies Socket.IO WebSocket connections to the server automatically.
+- Local development defaults:
+  - The client’s Vite configuration proxies WebSocket connections to the server on port 3001 during development.
 
-**Section sources**
-- [README.md:16-23](file://README.md#L16-L23)
-- [server/package.json:6-9](file://server/package.json#L6-L9)
-- [client/vite.config.js:6-15](file://client/vite.config.js#L6-L15)
-
-## Local Server and Client Startup
-- Server startup
-  - The server entry point initializes Express, CORS, and Socket.IO.
-  - It listens on the configured port (default 3001) and exposes a health endpoint.
-  - The server manages game state and broadcasts events to connected clients.
-
-- Client startup
-  - The client entry point sets up the React app with the GameProvider.
-  - It connects to the Socket.IO server using the configured URL.
-  - The client handles all game screens and state updates via Socket.IO events.
-
-Ports:
-- Server: 3001 (default)
-- Client: 5173 (default)
-
-Proxy:
-- The client Vite config proxies `/socket.io` requests to the server at `http://localhost:3001`.
-
-**Section sources**
-- [server/index.js:14-28](file://server/index.js#L14-L28)
-- [server/index.js:682-687](file://server/index.js#L682-L687)
-- [client/src/main.jsx:1-14](file://client/src/main.jsx#L1-L14)
-- [client/src/hooks/useSocket.js:4](file://client/src/hooks/useSocket.js#L4)
-- [client/vite.config.js:6-15](file://client/vite.config.js#L6-L15)
-
-## Environment Variables
-Configure the following environment variables to customize behavior:
-
-- Server
-  - PORT: Server port (default: 3001)
-
-- Client
-  - VITE_SERVER_URL: Socket.IO server URL (default: http://localhost:3001)
-
-How to set them:
-- Set environment variables in your shell session or use a `.env` file in the client directory if supported by your development setup.
-
-Why they matter:
-- PORT controls where the server listens.
-- VITE_SERVER_URL tells the client where to connect to the Socket.IO server.
+- Environment file placement:
+  - Create a .env file in the root of the repository to persist environment variables locally. The .gitignore already excludes .env files from version control.
 
 **Section sources**
 - [README.md:48-61](file://README.md#L48-L61)
-- [client/src/hooks/useSocket.js:4](file://client/src/hooks/useSocket.js#L4)
-- [client/vite.config.js:6-15](file://client/vite.config.js#L6-L15)
+- [client/vite.config.js:6-14](file://client/vite.config.js#L6-L14)
+- [.gitignore:3](file://.gitignore#L3)
 
-## Accessing the Application Locally
-- Open the client in your browser at http://localhost:5173.
-- On mobile devices, open the same URL from the device’s browser.
-- The client will attempt to connect to the server at the configured URL.
+## Development Setup
+Start both the server and client in separate terminals for a smooth development experience with hot reload.
 
-What to expect:
-- You should see the home screen where you can create or join a room.
-- Once connected, you can invite others to join using the room code.
+- Terminal 1: Start the server
+  - Change to server directory: cd server
+  - Start the server in development mode: npm run dev
+  - The server runs on port 3001 by default and watches for file changes.
+
+- Terminal 2: Start the client
+  - Change to client directory: cd client
+  - Start the Vite development server: npm run dev
+  - The client runs on port 5173 by default and enables hot module replacement.
+
+- Proxy configuration:
+  - Vite proxies WebSocket traffic for /socket.io to http://localhost:3001, ensuring seamless real-time communication during development.
+
+- Hot reload:
+  - Changes to client code trigger instant UI updates.
+  - Server changes automatically restart the Node.js process in development mode.
+
+**Section sources**
+- [README.md:16-22](file://README.md#L16-L22)
+- [server/package.json:6-9](file://server/package.json#L6-L9)
+- [client/vite.config.js:6-14](file://client/vite.config.js#L6-L14)
+
+## Accessing the Game Locally
+Once both servers are running, access the game from your browser or mobile device.
+
+- Open the client in your browser:
+  - Visit http://localhost:5173 in your desktop or mobile browser.
+
+- Mobile devices:
+  - On your phone, open the same URL as your computer (ensure both devices are on the same network).
+
+- Initial screen:
+  - You will land on the Home screen where you can create or join a room.
+
+- Room creation and joining:
+  - Host creates a room and receives a 4-letter code.
+  - Other players join using the code and a display name.
 
 **Section sources**
 - [README.md:25](file://README.md#L25)
-- [client/src/hooks/useSocket.js:4](file://client/src/hooks/useSocket.js#L4)
+- [client/src/main.jsx:7-13](file://client/src/main.jsx#L7-L13)
 
-## Development Workflow
-Typical development tasks:
+## Testing Real-Time Functionality
+Validate that real-time events are working correctly across multiple players.
 
-- Start both servers
-  - Terminal 1: `cd server && npm run dev`
-  - Terminal 2: `cd client && npm run dev`
+- Create a room:
+  - Host creates a room and receives a 4-letter code.
+  - Confirm the lobby screen loads and the host flag is set.
 
-- Build for production
-  - Server: `cd server && npm start`
-  - Client: `cd client && npm run build`
+- Join the room:
+  - Other players join using the code and a display name.
+  - Verify player list updates and toast notifications appear.
 
-- Preview client build locally
-  - Client: `cd client && npm run preview`
+- Start the game:
+  - Host selects a category and starts the game.
+  - Role assignments are sent privately to each player.
+  - The game advances to the role reveal phase.
 
-- Hot reload
-  - Both server and client support hot reloading during development.
+- Clue submission:
+  - Players submit one-word clues.
+  - Confirm clue appears in the discussion phase for all players.
 
-- Socket.IO events
-  - The client listens to and emits Socket.IO events defined in the server.
-  - Use the developer tools network tab to inspect WebSocket traffic.
+- Voting:
+  - Players vote for who they suspect is the imposter.
+  - Votes are tallied and results are revealed with staggered animations.
+
+- Imposter guess:
+  - The imposter can submit a guess for the topic.
+  - Results indicate whether the guess was correct.
+
+- Next round and final results:
+  - Host advances rounds until the game ends.
+  - Final standings are displayed with winners.
+
+- Reconnection:
+  - Simulate disconnection and reconnection to verify graceful handling.
 
 **Section sources**
-- [README.md:16-23](file://README.md#L16-L23)
-- [server/package.json:6-9](file://server/package.json#L6-L9)
-- [client/package.json:7-11](file://client/package.json#L7-L11)
+- [README.md:27-38](file://README.md#L27-L38)
 - [server/index.js:173-676](file://server/index.js#L173-L676)
+- [client/src/context/GameContext.jsx:70-254](file://client/src/context/GameContext.jsx#L70-L254)
+
+## Deployment Options
+Deploy the server and client independently for production environments.
+
+- Server deployment to Railway:
+  - Push the repository to GitHub.
+  - Create a new project on Railway and deploy from GitHub.
+  - Set Root Directory to server.
+  - Add environment variable: PORT=3001.
+  - Railway auto-detects Node.js and runs npm start.
+  - Note the Railway URL (e.g., https://your-app.up.railway.app).
+
+- Client deployment to Vercel:
+  - Create a new project on Vercel and import your GitHub repository.
+  - Set Root Directory to client.
+  - Select Vite as the framework preset.
+  - Add environment variable: VITE_SERVER_URL=https://your-railway-app.up.railway.app.
+  - Deploy the client.
+
+- Production ports:
+  - Server runs on the configured PORT (default 3001).
+  - Client runs on Vercel’s managed CDN and serves static assets.
+
+**Section sources**
+- [README.md:62-79](file://README.md#L62-L79)
+
+## Troubleshooting Guide
+Common setup and runtime issues with solutions.
+
+- Port conflicts:
+  - Symptom: Server fails to start on port 3001.
+  - Solution: Change PORT in environment variables or stop the conflicting service.
+
+- CORS errors:
+  - Symptom: Client cannot connect to server in development.
+  - Solution: Ensure the server allows cross-origin requests and the client points to the correct VITE_SERVER_URL.
+
+- Socket connection failures:
+  - Symptom: UI shows disconnected state or no real-time updates.
+  - Solution: Verify VITE_SERVER_URL matches the deployed server URL. Check browser console for connection errors.
+
+- Proxy issues in Vite:
+  - Symptom: WebSocket connections fail during development.
+  - Solution: Confirm Vite proxy configuration targets the correct server URL and port.
+
+- Name collisions:
+  - Symptom: Cannot join a room due to duplicate names.
+  - Solution: Choose a unique display name in the lobby.
+
+- Full room:
+  - Symptom: Cannot join a room that already has 8 players.
+  - Solution: Wait for a room to clear or create a new one.
+
+- Reconnection timeouts:
+  - Symptom: Disconnected players are removed after 30 seconds.
+  - Solution: Reconnect promptly or ensure stable network connectivity.
+
+**Section sources**
+- [server/index.js:20-25](file://server/index.js#L20-L25)
+- [client/vite.config.js:8-13](file://client/vite.config.js#L8-L13)
+- [server/gameManager.js:100-113](file://server/gameManager.js#L100-L113)
 
 ## Verification Steps
-Confirm your setup is working:
+Confirm a successful installation and setup.
 
-- Server health check
-  - Visit http://localhost:3001 in your browser.
-  - You should receive a JSON response indicating the server is running and reporting room count.
+- Server health check:
+  - Visit http://localhost:3001 in your browser to confirm the server responds with a JSON status and room count.
 
-- Client connectivity
-  - Open http://localhost:5173 in your browser.
-  - The client should connect to the server and display the home screen.
+- Client build:
+  - Run npm run build in the client directory to verify the build completes without errors.
 
-- Socket.IO connection
-  - Open the browser’s developer tools Network tab.
-  - Look for WebSocket connections to `/socket.io` and verify they upgrade successfully.
+- Socket connection:
+  - Open http://localhost:5173 and verify the client connects to the server (indicated by connected state and lobby loading).
 
-- Basic gameplay
-  - Create a room, invite a friend, and start a game.
-  - Verify that roles are assigned, clues are submitted, and voting proceeds as expected.
+- Real-time events:
+  - Create a room, add a few test players, and simulate a full round (clue, discussion, voting, results) to ensure all events flow correctly.
+
+- Environment variables:
+  - Confirm VITE_SERVER_URL points to the correct server address and PORT is set appropriately for the server.
 
 **Section sources**
 - [server/index.js:33-35](file://server/index.js#L33-L35)
-- [client/src/hooks/useSocket.js:34-57](file://client/src/hooks/useSocket.js#L34-L57)
-
-## Expected Behavior During Development
-- Server logs
-  - You will see connection messages and game lifecycle events in the server terminal.
-
-- Client behavior
-  - The client maintains a persistent connection to the server.
-  - It displays real-time updates for timers, phase changes, and game events.
-  - Toast notifications appear for player joins, leaves, and errors.
-
-- Proxy behavior
-  - WebSocket traffic from the client is proxied to the server automatically via Vite.
-
-- Graceful disconnections
-  - The server marks disconnected players and allows reconnection within a grace period.
-
-**Section sources**
-- [server/index.js:173-676](file://server/index.js#L173-L676)
-- [client/src/context/GameContext.jsx:70-254](file://client/src/context/GameContext.jsx#L70-L254)
-- [client/vite.config.js:8-13](file://client/vite.config.js#L8-L13)
-
-## Troubleshooting Guide
-Common issues and fixes:
-
-- Port conflicts
-  - Problem: Port 3001 or 5173 is already in use.
-  - Fix: Change the PORT environment variable for the server or adjust the client port in the Vite config.
-
-- Cannot connect to server
-  - Problem: Client cannot reach the server.
-  - Check: Ensure VITE_SERVER_URL is set correctly and matches the server address.
-  - Verify: The server is running and listening on the expected port.
-
-- CORS errors
-  - Problem: Cross-origin requests blocked.
-  - Check: The server enables CORS for all origins in development.
-
-- Socket.IO not upgrading to WebSocket
-  - Problem: Polling only instead of WebSocket.
-  - Check: Confirm the proxy configuration in the client Vite config is correct.
-
-- Player name length errors
-  - Problem: Player name too long.
-  - Fix: Keep names under 20 characters.
-
-- Reconnection issues
-  - Problem: Players disappear after disconnect.
-  - Info: The server removes disconnected players after a grace period; reconnect within that time.
-
-- Missing dependencies
-  - Problem: Errors about missing packages.
-  - Fix: Run `npm install` in both server and client directories.
-
-- Windows-specific issues
-  - Problem: Scripts not recognized.
-  - Fix: Use `npm run dev` instead of bash-style commands, or run from a shell that supports them.
-
-**Section sources**
-- [README.md:48-61](file://README.md#L48-L61)
-- [client/vite.config.js:6-15](file://client/vite.config.js#L6-L15)
-- [server/index.js:20-25](file://server/index.js#L20-L25)
-- [server/index.js:223-224](file://server/index.js#L223-L224)
-- [client/src/hooks/useSocket.js:21-29](file://client/src/hooks/useSocket.js#L21-L29)
+- [client/src/hooks/useSocket.js:4](file://client/src/hooks/useSocket.js#L4)
 
 ## Conclusion
-You now have everything needed to run the Imposter Game locally. Start both the server and client, verify connectivity, and begin testing gameplay. Use the troubleshooting section if you encounter issues, and refer back to the environment variables and ports as needed.
+You now have everything needed to run Imposter Game locally, develop features with hot reload, and deploy to production. Use the provided environment variables, development scripts, and deployment instructions to get started quickly. Test real-time functionality across multiple players and verify all game phases work as expected. For persistent deployments, follow the Railway and Vercel instructions to host the server and client separately.
