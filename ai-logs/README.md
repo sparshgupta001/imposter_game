@@ -1,34 +1,65 @@
 # AI Logs
 
-This folder was prepared for contest submission.
+This directory contains recovered AI-assisted development logs used during the creation and refinement of the Imposter Game project.
 
-## Recovered Materials
+## Files
 
-No plain-text AI prompt/response transcripts, exported chats, or conversation logs were found in the repository during the audit.
+### qoder-session-1.md
 
-The repository does contain Qoder-generated documentation under:
+Covers the initial project generation and deployment workflow, including:
 
-- `.qoder/repowiki/en/content/`
-- `.qoder/repowiki/en/meta/repowiki-metadata.json`
+* Full-stack game generation
+* Local setup and execution
+* GitHub setup
+* Railway deployment
+* Vercel deployment
+* Environment variable configuration
 
-Those files appear to be generated project notes and metadata, not recoverable prompt/response conversations. The metadata file also contains encrypted or encoded fields that could not be converted into a trustworthy conversation transcript.
+### qoder-session-2.md
 
-## Unavailable Materials
+Covers post-deployment improvements, including:
 
-The original Qoder chat transcript, prompts, and responses were not present as plain-text files in the repository. Because the contest requires authentic AI logs, no conversations were reconstructed or invented.
+* Mobile connectivity fixes
+* Socket.io transport configuration changes
+* Retry and reconnection improvements
+* Light-theme migration
+* Discussion screen cleanup
 
-## Format Note
+### codex-audit.md
 
-If prompt/response logs become available later, add them as Markdown files using this structure:
+Covers the final pre-submission audit, including:
 
-```md
-## Prompt
+* leaveRoom handling fixes
+* Ghost-player cleanup
+* Host reassignment
+* Accessibility improvements
+* Build verification
+* README and documentation updates
+* Production readiness review
 
-...
+## Recovery Notes
 
-## Response
+The primary AI development tool used for this project was Qoder, with a later audit performed using Codex.
 
-...
+Original raw exports were not available at the time of submission preparation. The files in this directory were created from preserved conversation history, development notes, and recovered AI interactions related to this repository.
 
----
-```
+Only interactions that could be reasonably traced to the actual development process have been included.
+
+## Project
+
+Repository:
+https://github.com/sparshgupta001/imposter_game
+
+Project Type:
+Real-time multiplayer Imposter Game
+
+Tech Stack:
+
+* React
+* Vite
+* Tailwind CSS
+* Node.js
+* Express
+* Socket.io
+* Railway
+* Vercel
