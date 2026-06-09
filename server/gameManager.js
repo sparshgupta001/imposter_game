@@ -160,7 +160,7 @@ class GameManager {
    * If the host leaves, the next player becomes host.
    * If the room is empty after removal, it is deleted.
    * @param {string} socketId
-   * @returns {{ room: object|null, wasHost: boolean, newHostId: string|null, roomDeleted: boolean }}
+   * @returns {{ room: object|null, wasHost: boolean, newHostId: string|null, roomDeleted: boolean, removedPlayer?: object|null }}
    */
   removePlayer(socketId) {
     const code = this.playerRoomIndex.get(socketId);
@@ -175,6 +175,24 @@ class GameManager {
     }
 
     const wasHost = room.hostId === socketId;
+    const removedPlayer = room.players.get(socketId) || null;
+
+    if (this.disconnectTimers.has(socketId)) {
+      clearTimeout(this.disconnectTimers.get(socketId));
+      this.disconnectTimers.delete(socketId);
+    }
+
+    // Remove votes cast by or targeting this player so later tallies do not
+    // reference someone who has already left the room.
+    room.votes.delete(socketId);
+    for (const [voterId, targetId] of room.votes) {
+      if (targetId === socketId) {
+        room.votes.delete(voterId);
+        const voter = room.players.get(voterId);
+        if (voter) voter.vote = null;
+      }
+    }
+
     room.players.delete(socketId);
     this.playerRoomIndex.delete(socketId);
 
@@ -190,14 +208,15 @@ class GameManager {
 
     // If the host left, assign a new host (first remaining player)
     if (wasHost) {
-      const firstPlayer = room.players.values().next().value;
-      room.hostId = firstPlayer.id;
-      newHostId = firstPlayer.id;
-      console.log(`[GameManager] New host for room ${code}: ${firstPlayer.name} (${newHostId})`);
+      const remainingPlayers = Array.from(room.players.values());
+      const nextHost = remainingPlayers.find((player) => player.connected) || remainingPlayers[0];
+      room.hostId = nextHost.id;
+      newHostId = nextHost.id;
+      console.log(`[GameManager] New host for room ${code}: ${nextHost.name} (${newHostId})`);
     }
 
     console.log(`[GameManager] Player ${socketId} removed from room ${code}`);
-    return { room, wasHost, newHostId, roomDeleted: false };
+    return { room, wasHost, newHostId, roomDeleted: false, removedPlayer };
   }
 
   // ──────────────────────────────────────────────
@@ -279,7 +298,7 @@ class GameManager {
    * Store a player's vote.
    * @param {string} socketId - The voter
    * @param {string} targetId - The player being voted for
-   * @returns {boolean} True if ALL connected non-imposter voters have voted
+   * @returns {boolean} True if ALL connected players have voted
    */
   submitVote(socketId, targetId) {
     const room = this.getRoomByPlayer(socketId);

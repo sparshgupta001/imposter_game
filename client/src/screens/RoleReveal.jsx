@@ -36,8 +36,10 @@ export default function RoleReveal() {
       )}
 
       {/* Flip Card */}
-      <div
-        className="flip-card w-full max-w-[320px] h-[420px] cursor-pointer"
+      <button
+        type="button"
+        aria-label={revealed ? 'Role revealed' : 'Reveal your role'}
+        className="flip-card w-full max-w-[320px] h-[420px] cursor-pointer appearance-none border-0 bg-transparent p-0 text-left"
         onClick={handleReveal}
       >
         <div className={`flip-card-inner w-full h-full relative ${revealed ? 'flipped' : ''}`}>
@@ -109,7 +111,7 @@ export default function RoleReveal() {
             )}
           </div>
         </div>
-      </div>
+      </button>
 
       {/* Hint text */}
       <p className="mt-6 text-xs text-gray-400 animate-fade-in">

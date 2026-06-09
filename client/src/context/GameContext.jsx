@@ -36,6 +36,21 @@ export function GameProvider({ children }) {
 
   const toastIdRef = useRef(0);
   const errorTimeoutRef = useRef(null);
+  const playerNameRef = useRef('');
+  const playerIdRef = useRef(null);
+
+  useEffect(() => {
+    playerIdRef.current = playerId;
+  }, [playerId]);
+
+  const rememberPlayerName = useCallback((name) => {
+    const cleanName = (name || '').trim();
+    setPlayerName(cleanName);
+    playerNameRef.current = cleanName;
+    if (cleanName) {
+      sessionStorage.setItem('playerName', cleanName);
+    }
+  }, []);
 
   const addToast = useCallback((message, type = 'info') => {
     const id = ++toastIdRef.current;
@@ -73,24 +88,26 @@ export function GameProvider({ children }) {
 
     const onRoomCreated = (data) => {
       const code = data.roomCode || data.code;
+      const savedName = playerNameRef.current || sessionStorage.getItem('playerName') || data.playerName || '';
       setRoomCode(code);
       setPlayerId(data.playerId);
       setIsHost(true);
       setPlayers(data.players || []);
       setPhase('lobby');
       sessionStorage.setItem('roomCode', code);
-      sessionStorage.setItem('playerName', playerName);
+      if (savedName) rememberPlayerName(savedName);
     };
 
     const onJoinedRoom = (data) => {
       const code = data.roomCode || data.code;
+      const savedName = playerNameRef.current || sessionStorage.getItem('playerName') || data.playerName || '';
       setRoomCode(code);
       setPlayerId(data.playerId);
       setPlayers(data.players || []);
       setIsHost(data.isHost || false);
       setPhase('lobby');
       sessionStorage.setItem('roomCode', code);
-      sessionStorage.setItem('playerName', playerName);
+      if (savedName) rememberPlayerName(savedName);
     };
 
     const onPlayerJoined = (data) => {
@@ -102,6 +119,13 @@ export function GameProvider({ children }) {
 
     const onPlayerLeft = (data) => {
       setPlayers(data.players || []);
+      if (data.playerId) {
+        setClues((prev) => prev.filter((clue) => clue.playerId !== data.playerId));
+        setVotedPlayers((prev) => prev.filter((id) => id !== data.playerId));
+      }
+      if (data.newHostId && data.newHostId === playerIdRef.current) {
+        setIsHost(true);
+      }
       if (data.playerName) {
         addToast(`${data.playerName} left 👋`, 'warning');
       }
@@ -119,6 +143,7 @@ export function GameProvider({ children }) {
         setVotedPlayers([]);
       }
       if (data.phase === 'discussion') {
+        if (data.clues) setClues(data.clues);
         setVotes({});
         setVotedPlayers([]);
         setHasVoted(false);
@@ -155,6 +180,14 @@ export function GameProvider({ children }) {
       });
     };
 
+    const onVotingStateUpdated = (data) => {
+      const updatedVotedPlayers = data.votedPlayers || [];
+      setVotedPlayers(updatedVotedPlayers);
+      if (!updatedVotedPlayers.includes(playerIdRef.current)) {
+        setHasVoted(false);
+      }
+    };
+
     const onRoundResult = (data) => {
       setRoundResult(data);
       setPhase('results');
@@ -178,6 +211,7 @@ export function GameProvider({ children }) {
       const code = data.roomCode || data.code;
       if (code) setRoomCode(code);
       if (data.playerId) setPlayerId(data.playerId);
+      if (data.playerName) rememberPlayerName(data.playerName);
       if (data.players) setPlayers(data.players);
       if (data.phase) setPhase(data.phase);
       if (data.role) setRole(data.role);
@@ -226,6 +260,7 @@ export function GameProvider({ children }) {
     socket.on('timerTick', onTimerTick);
     socket.on('clueReceived', onClueReceived);
     socket.on('voteSubmitted', onVoteSubmitted);
+    socket.on('votingStateUpdated', onVotingStateUpdated);
     socket.on('roundResult', onRoundResult);
     socket.on('gameOver', onGameOver);
     socket.on('error', onError);
@@ -245,28 +280,27 @@ export function GameProvider({ children }) {
       socket.off('timerTick', onTimerTick);
       socket.off('clueReceived', onClueReceived);
       socket.off('voteSubmitted', onVoteSubmitted);
+      socket.off('votingStateUpdated', onVotingStateUpdated);
       socket.off('roundResult', onRoundResult);
       socket.off('gameOver', onGameOver);
       socket.off('error', onError);
       socket.off('reconnected', onReconnected);
       socket.off('imposterGuessResult', onImposterGuessResult);
     };
-  }, [socket, addToast, setErrorWithTimeout, playerName]);
+  }, [socket, addToast, setErrorWithTimeout, rememberPlayerName]);
 
   // Actions
   const createRoom = useCallback((name) => {
     if (!socket) return;
-    setPlayerName(name);
-    sessionStorage.setItem('playerName', name);
-    socket.emit('createRoom', { playerName: name });
-  }, [socket]);
+    rememberPlayerName(name);
+    socket.emit('createRoom', { playerName: name.trim() });
+  }, [socket, rememberPlayerName]);
 
   const joinRoom = useCallback((code, name) => {
     if (!socket) return;
-    setPlayerName(name);
-    sessionStorage.setItem('playerName', name);
-    socket.emit('joinRoom', { code: code.toUpperCase(), name });
-  }, [socket]);
+    rememberPlayerName(name);
+    socket.emit('joinRoom', { code: code.toUpperCase(), name: name.trim() });
+  }, [socket, rememberPlayerName]);
 
   const startGame = useCallback((category) => {
     if (!socket) return;
@@ -318,6 +352,9 @@ export function GameProvider({ children }) {
     }
     setRoomCode(null);
     setPlayerId(null);
+    setPlayerName('');
+    playerNameRef.current = '';
+    playerIdRef.current = null;
     setPlayers([]);
     setPhase('home');
     setRole(null);

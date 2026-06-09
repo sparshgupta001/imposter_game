@@ -12,14 +12,18 @@ const GameManager = require('./gameManager');
 // ──────────────────────────────────────────────
 
 const app = express();
-app.use(cors());
+const CLIENT_ORIGIN = process.env.CLIENT_ORIGIN
+  ? process.env.CLIENT_ORIGIN.split(',').map((origin) => origin.trim()).filter(Boolean)
+  : '*';
+
+app.use(cors({ origin: CLIENT_ORIGIN }));
 app.use(express.json());
 
 const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: '*',
+    origin: CLIENT_ORIGIN,
     methods: ['GET', 'POST'],
   },
 });
@@ -40,6 +44,50 @@ app.get('/', (req, res) => {
 
 function serializePlayers(room) {
   return gm.serializePlayers(room.players);
+}
+
+function getConnectedPlayers(room) {
+  return Array.from(room.players.values()).filter((player) => player.connected);
+}
+
+function broadcastPlayerRemoval(room, playerId, playerName, wasHost, newHostId, reason = 'left') {
+  if (!room) return;
+
+  io.to(room.code).emit('playerLeft', {
+    playerId,
+    playerName,
+    wasHost,
+    newHostId,
+    reason,
+    players: serializePlayers(room),
+  });
+
+  if (wasHost && newHostId) {
+    io.to(newHostId).emit('youAreHost');
+  }
+
+  if (room.phase === 'voting') {
+    io.to(room.code).emit('votingStateUpdated', {
+      votedPlayers: Array.from(room.votes.keys()).filter((playerId) => room.players.get(playerId)?.connected),
+    });
+  }
+}
+
+function resolvePhaseAfterPlayerRemoval(room) {
+  if (!room) return;
+
+  const connectedPlayers = getConnectedPlayers(room);
+  if (connectedPlayers.length === 0) return;
+
+  if (room.phase === 'clue' && connectedPlayers.every((player) => player.clue)) {
+    gm.clearTimer(room.code);
+    advanceToDiscussion(room.code);
+  }
+
+  if (room.phase === 'voting' && connectedPlayers.every((player) => player.vote)) {
+    gm.clearTimer(room.code);
+    tallyAndReveal(room.code);
+  }
 }
 
 /**
@@ -193,7 +241,7 @@ io.on('connection', (socket) => {
       socket.join(code);
 
       const players = serializePlayers(room);
-      const response = { code, roomCode: code, playerId: socket.id, players, isHost: true };
+      const response = { code, roomCode: code, playerId: socket.id, playerName: hostPlayer?.name || playerName, players, isHost: true };
       if (typeof callback === 'function') {
         callback({ success: true, ...response });
       }
@@ -231,7 +279,7 @@ io.on('connection', (socket) => {
       io.to(code).emit('playerJoined', { players, playerName: name });
 
       // Send confirmation to the joining player
-      const response = { code, roomCode: code, playerId: socket.id, players, isHost: false };
+      const response = { code, roomCode: code, playerId: socket.id, playerName: name, players, isHost: false };
       if (typeof callback === 'function') {
         callback({ success: true, ...response });
       }
@@ -537,7 +585,46 @@ io.on('connection', (socket) => {
     }
   });
 
-  // ── Reconnect ────────────────────────────────
+  // Leave Room
+
+  socket.on('leaveRoom', (data, callback) => {
+    try {
+      const room = gm.getRoomByPlayer(socket.id);
+      if (!room) {
+        if (typeof callback === 'function') {
+          callback({ success: true, alreadyLeft: true });
+        }
+        return;
+      }
+
+      const code = room.code;
+      const player = room.players.get(socket.id);
+      const playerName = player ? player.name : 'A player';
+
+      const { room: updatedRoom, wasHost, newHostId, roomDeleted } = gm.removePlayer(socket.id);
+      socket.leave(code);
+      socket.emit('leftRoom', { code });
+
+      if (!roomDeleted && updatedRoom) {
+        broadcastPlayerRemoval(updatedRoom, socket.id, playerName, wasHost, newHostId, 'left');
+        resolvePhaseAfterPlayerRemoval(updatedRoom);
+      }
+
+      if (typeof callback === 'function') {
+        callback({ success: true, roomDeleted });
+      }
+
+      console.log(`[Socket] Player "${playerName}" left room ${code}`);
+    } catch (err) {
+      console.error(`[Socket] leaveRoom error: ${err.message}`);
+      if (typeof callback === 'function') {
+        callback({ success: false, error: err.message });
+      }
+      socket.emit('error', { message: err.message });
+    }
+  });
+
+  // Reconnect
 
   socket.on('reconnect', (data, callback) => {
     try {
@@ -561,6 +648,7 @@ io.on('connection', (socket) => {
         code: room.code,
         roomCode: room.code,
         playerId: socket.id,
+        playerName: player.name,
         phase: room.phase,
         players: serializePlayers(room),
         hostId: room.hostId,
@@ -631,6 +719,14 @@ io.on('connection', (socket) => {
         players: serializePlayers(room),
       });
 
+      if (room.phase === 'voting') {
+        io.to(room.code).emit('votingStateUpdated', {
+          votedPlayers: Array.from(room.votes.keys()).filter((playerId) => room.players.get(playerId)?.connected),
+        });
+      }
+
+      resolvePhaseAfterPlayerRemoval(room);
+
       console.log(`[Socket] Player "${playerName}" (${socket.id}) disconnected from room ${room.code} — 30s grace period`);
 
       // Set a 30-second grace period for reconnection
@@ -651,17 +747,8 @@ io.on('connection', (socket) => {
           }
 
           if (updatedRoom) {
-            io.to(updatedRoom.code).emit('playerLeft', {
-              playerId: socket.id,
-              playerName,
-              wasHost,
-              newHostId,
-              players: serializePlayers(updatedRoom),
-            });
-
-            if (wasHost && newHostId) {
-              io.to(newHostId).emit('youAreHost');
-            }
+            broadcastPlayerRemoval(updatedRoom, socket.id, playerName, wasHost, newHostId, 'disconnect-timeout');
+            resolvePhaseAfterPlayerRemoval(updatedRoom);
           }
 
           console.log(`[Socket] Player "${playerName}" removed after 30s disconnect timeout`);

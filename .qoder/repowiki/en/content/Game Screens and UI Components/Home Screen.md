@@ -15,10 +15,11 @@
 
 ## Update Summary
 **Changes Made**
-- Enhanced connection status display system with improved user interface
-- Added informative connection status messages and troubleshooting guidance
-- Implemented prominent retry button for better user experience during connection issues
-- Updated connection status indicators and error messaging system documentation
+- Updated styling to reflect light theme implementation with new color palette and gradients
+- Enhanced glass card styling with light theme rgba values for improved visual depth
+- Updated background gradients to use light theme colors (#f5f5f5, #e8e8f0, #f0f0f5)
+- Refined text colors to use gray-800 and gray-500 for optimal contrast
+- Improved component styling with light theme compatible colors and effects
 
 ## Table of Contents
 1. [Introduction](#introduction)
@@ -33,6 +34,8 @@
 
 ## Introduction
 This document provides comprehensive documentation for the Home screen component, focusing on room creation and joining functionality, form validation, input sanitization, error handling, animated background elements, responsive design, button interactions, state management for mode switching, enhanced connection status indicators with improved user interface, error messaging system, keyboard navigation support, styling approach using Tailwind CSS classes and custom animations, and examples of form validation logic and user interaction patterns.
+
+**Updated** The Home screen now implements a cohesive light theme aesthetic with refined color palettes, enhanced glass card effects, and optimized visual hierarchy that maintains accessibility while providing modern visual appeal.
 
 ## Project Structure
 The Home screen resides in the client application under the screens directory and integrates with the GameContext for state management and useSocket for WebSocket connectivity. The server-side logic handles room creation, joining, and emits events consumed by the client.
@@ -67,7 +70,7 @@ A --> G
 - [Home.jsx:1-238](file://client/src/screens/Home.jsx#L1-L238)
 - [GameContext.jsx:1-383](file://client/src/context/GameContext.jsx#L1-L383)
 - [useSocket.js:1-76](file://client/src/hooks/useSocket.js#L1-L76)
-- [index.css:1-215](file://client/src/index.css#L1-L215)
+- [index.css:1-217](file://client/src/index.css#L1-L217)
 - [tailwind.config.js:1-48](file://client/tailwind.config.js#L1-L48)
 - [vite.config.js:1-16](file://client/vite.config.js#L1-L16)
 - [index.js:1-687](file://server/index.js#L1-L687)
@@ -78,7 +81,7 @@ A --> G
 - [GameContext.jsx:12-383](file://client/src/context/GameContext.jsx#L12-L383)
 - [useSocket.js:8-76](file://client/src/hooks/useSocket.js#L8-L76)
 - [App.jsx:67-101](file://client/src/App.jsx#L67-L101)
-- [index.css:1-215](file://client/src/index.css#L1-L215)
+- [index.css:1-217](file://client/src/index.css#L1-L217)
 - [tailwind.config.js:1-48](file://client/tailwind.config.js#L1-L48)
 - [vite.config.js:1-16](file://client/vite.config.js#L1-L16)
 - [index.js:173-248](file://server/index.js#L173-L248)
@@ -88,7 +91,7 @@ A --> G
 - Home screen component manages two primary modes: create and join. It renders floating emoji backgrounds, glow orbs, enhanced connection status indicator with retry button, error messages, and interactive cards for room actions.
 - GameContext provides centralized state and actions for room creation, joining, and error handling, along with socket connection state.
 - useSocket encapsulates WebSocket connection logic, reconnection behavior, and connection status updates.
-- Tailwind CSS and custom animations define the visual presentation and motion effects.
+- Tailwind CSS and custom animations define the visual presentation and motion effects with a cohesive light theme aesthetic.
 
 Key responsibilities:
 - Form validation and sanitization for room creation and joining inputs.
@@ -99,12 +102,13 @@ Key responsibilities:
 - Enhanced error messaging system with automatic timeouts and clear controls.
 - Improved connection status indicators with retry functionality and troubleshooting guidance.
 - Connection status indicators and reconnection handling.
+- **Light theme styling with refined color palette and glass effects**.
 
 **Section sources**
 - [Home.jsx:12-238](file://client/src/screens/Home.jsx#L12-L238)
 - [GameContext.jsx:12-383](file://client/src/context/GameContext.jsx#L12-L383)
 - [useSocket.js:8-76](file://client/src/hooks/useSocket.js#L8-L76)
-- [index.css:111-215](file://client/src/index.css#L111-L215)
+- [index.css:111-217](file://client/src/index.css#L111-L217)
 - [tailwind.config.js:10-43](file://client/tailwind.config.js#L10-L43)
 
 ## Architecture Overview
@@ -148,7 +152,7 @@ GC-->>H : Update state (roomCode, phase=lobby)
 ### Home Screen Component
 The Home screen implements:
 - Floating emoji background elements with randomized positions, delays, and durations.
-- Glow orbs for ambient visual enhancement.
+- Glow orbs for ambient visual enhancement using light theme colors.
 - Title with gradient text and drop shadow.
 - **Enhanced connection warning banner** with retry button and troubleshooting guidance when offline.
 - Error banner with automatic dismissal.
@@ -156,6 +160,7 @@ The Home screen implements:
 - Form validation and sanitization for inputs.
 - Keyboard navigation support via Enter key.
 - Responsive design using Tailwind utilities and custom animations.
+- **Light theme styling with refined glass card effects and color palette**.
 
 **Enhanced Connection Status Display System**:
 The connection status display has been significantly improved with:
@@ -165,6 +170,14 @@ The connection status display has been significantly improved with:
 - Animated fade-in transition for better user experience
 - Color-coded styling with red accents for visibility
 - Proper spacing and typography for readability
+
+**Light Theme Styling Enhancements**:
+The component now features a cohesive light theme aesthetic:
+- Background gradient using light theme colors: `#f5f5f5`, `#e8e8f0`, `#f0f0f5`
+- Glass card effects with enhanced rgba values for better transparency: `rgba(255, 255, 255, 0.7)` and `rgba(255, 255, 255, 0.9)`
+- Text colors optimized for light theme: `text-gray-800` for primary text, `text-gray-500` for secondary text
+- Accent colors using light theme variants: `accent` for red (`#e94560`) and `accent-light` for lighter red (`#ff6b81`)
+- Neon colors for interactive elements: `neon-blue` (`#3b82f6`), `neon-purple` (`#8b5cf6`), `neon-green` (`#10b981`)
 
 Form validation and sanitization:
 - Create mode validates name length (minimum 2 characters) and trims whitespace before submission.
@@ -211,11 +224,12 @@ Styling approach:
 - Tailwind utilities for layout, colors, borders, shadows, and transitions.
 - Custom animations defined in tailwind.config.js and index.css for floating, glowing, fading, and scaling effects.
 - Gradient text and drop shadow for title emphasis.
-- Enhanced glass card styling with improved backdrop-filter effects.
+- Enhanced glass card styling with improved backdrop-filter effects using light theme rgba values.
+- **Light theme color palette with optimized contrast ratios for accessibility**.
 
 **Section sources**
 - [Home.jsx:12-238](file://client/src/screens/Home.jsx#L12-L238)
-- [index.css:111-215](file://client/src/index.css#L111-L215)
+- [index.css:111-217](file://client/src/index.css#L111-L217)
 - [tailwind.config.js:10-43](file://client/tailwind.config.js#L10-L43)
 
 ### GameContext and useSocket Integration
@@ -249,6 +263,7 @@ Floating emojis:
 
 Glow orbs:
 - Two large blurred circles positioned absolutely with gradient overlays and blur filters.
+- **Enhanced with light theme colors using accent and neon-purple variants**.
 
 Custom animations:
 - Tailwind animation utilities configured in tailwind.config.js.
@@ -259,7 +274,7 @@ Custom animations:
 - [Home.jsx:4-10](file://client/src/screens/Home.jsx#L4-L10)
 - [Home.jsx:44-65](file://client/src/screens/Home.jsx#L44-L65)
 - [tailwind.config.js:10-43](file://client/tailwind.config.js#L10-L43)
-- [index.css:111-215](file://client/src/index.css#L111-L215)
+- [index.css:111-217](file://client/src/index.css#L111-L217)
 
 ### Responsive Design Implementation
 Responsive behavior:
@@ -271,6 +286,7 @@ Accessibility considerations:
 - Focus-visible outlines managed via focus utilities.
 - Disabled states for buttons when conditions are not met.
 - Keyboard navigation via Enter key support.
+- **Optimized color contrast ratios for light theme accessibility**.
 
 **Section sources**
 - [Home.jsx:67-82](file://client/src/screens/Home.jsx#L67-L82)
@@ -334,7 +350,20 @@ Focus management:
 - [Home.jsx:208-209](file://client/src/screens/Home.jsx#L208-L209)
 
 ### Styling Approach Using Tailwind CSS Classes and Custom Animations
-Tailwind utilities:
+**Light Theme Color Palette**:
+- Primary background: `#f5f5f5` (light theme 100)
+- Secondary background: `#e8e8f0` (light theme 200)
+- Accent red: `#e94560` (accent)
+- Light red: `#ff6b81` (accent-light)
+- Neon colors: blue (`#3b82f6`), purple (`#8b5cf6`), green (`#10b981`)
+
+**Enhanced Glass Card Effects**:
+- `.glass-card`: `rgba(255, 255, 255, 0.7)` background with `blur(24px)` backdrop-filter
+- `.glass-card-strong`: `rgba(255, 255, 255, 0.9)` background with `blur(32px)` backdrop-filter
+- Improved border radius: 16px for `.glass-card`, 20px for `.glass-card-strong`
+- Enhanced box shadows with light theme opacity values
+
+**Tailwind utilities**:
 - Layout: w-full, h-full, flex, flex-col, items-center, justify-center, px-6, relative, overflow-hidden.
 - Spacing: mb-*, mt-*, mr-*, ml-*, space-y-*.
 - Typography: text-*, font-*, uppercase, tracking-*, leading-*, text-center.
@@ -342,19 +371,17 @@ Tailwind utilities:
 - Effects: backdrop-blur, filter, drop-shadow, transition-all, duration-*, ease-out, hover:*, focus:*.
 - Responsive: sm:*, md:*, lg:*, xl:*.
 
-Custom animations:
+**Custom animations**:
 - Tailwind animation utilities: animate-fade-in, animate-slide-up, animate-scale-in, animate-glow, animate-float.
 - Keyframes defined in tailwind.config.js and index.css for float, glow, fade-in, slide-up, scale-in.
 
-Glass card effect:
-- Custom classes glass-card and glass-card-strong with backdrop-filter and border styles.
-
-Gradient text:
+**Gradient text**:
 - Linear gradient applied to title text with WebkitBackgroundClip and filter.
+- **Enhanced with light theme color combinations for better contrast**.
 
 **Section sources**
 - [Home.jsx:42-238](file://client/src/screens/Home.jsx#L42-L238)
-- [index.css:111-215](file://client/src/index.css#L111-L215)
+- [index.css:111-217](file://client/src/index.css#L111-L217)
 - [tailwind.config.js:10-43](file://client/tailwind.config.js#L10-L43)
 
 ### Examples of Form Validation Logic and User Interaction Patterns
@@ -393,7 +420,7 @@ H --> TW["tailwind.config.js"]
 - [useSocket.js:8-76](file://client/src/hooks/useSocket.js#L8-L76)
 - [index.js:173-248](file://server/index.js#L173-L248)
 - [gameManager.js:53-136](file://server/gameManager.js#L53-L136)
-- [index.css:1-215](file://client/src/index.css#L1-L215)
+- [index.css:1-217](file://client/src/index.css#L1-L217)
 - [tailwind.config.js:1-48](file://client/tailwind.config.js#L1-L48)
 
 **Section sources**
@@ -402,7 +429,7 @@ H --> TW["tailwind.config.js"]
 - [useSocket.js:8-76](file://client/src/hooks/useSocket.js#L8-L76)
 - [index.js:173-248](file://server/index.js#L173-L248)
 - [gameManager.js:53-136](file://server/gameManager.js#L53-L136)
-- [index.css:1-215](file://client/src/index.css#L1-L215)
+- [index.css:1-217](file://client/src/index.css#L1-L217)
 - [tailwind.config.js:1-48](file://client/tailwind.config.js#L1-L48)
 
 ## Performance Considerations
@@ -411,6 +438,7 @@ H --> TW["tailwind.config.js"]
 - Connection management: useSocket employs reconnection with exponential backoff; ensure server-side reconnection logic avoids duplicate entries.
 - Rendering: Conditional rendering based on mode and connected state minimizes DOM updates.
 - **Enhanced connection status display**: Optimized rendering of connection warnings and retry buttons for better performance.
+- **Light theme optimization**: Glass card effects use efficient rgba values and backdrop-filter for optimal performance across devices.
 
 ## Troubleshooting Guide
 Common issues and resolutions:
@@ -421,6 +449,7 @@ Common issues and resolutions:
 - Connection indicator stuck offline: Review useSocket connection logic and server-side connection events; check proxy configuration in vite.config.js.
 - **Connection issues with enhanced display**: Use the retry button to immediately attempt reconnection; check network connectivity and server availability.
 - **Connection warning persists**: Review browser console for WebSocket connection errors; verify server is reachable and not blocking connections.
+- **Light theme rendering issues**: Check browser compatibility with backdrop-filter and rgba values; verify Tailwind CSS is properly configured.
 
 **Section sources**
 - [GameContext.jsx:53-68](file://client/src/context/GameContext.jsx#L53-L68)
@@ -430,3 +459,5 @@ Common issues and resolutions:
 
 ## Conclusion
 The Home screen component provides a robust foundation for room creation and joining with comprehensive form validation, input sanitization, error handling, and animated visual enhancements. Its integration with GameContext and useSocket ensures reliable state management and real-time connectivity. The **enhanced connection status display system** significantly improves user experience by providing informative connection messages, troubleshooting guidance, and a prominent retry button for better handling of connection issues. The responsive design and keyboard navigation improve accessibility, while the styling approach leverages Tailwind utilities and custom animations for a polished user experience.
+
+**Updated** The implementation now features a cohesive light theme aesthetic with refined color palettes, enhanced glass card effects, and optimized visual hierarchy that maintains accessibility while providing modern visual appeal. The light theme styling uses carefully selected rgba values for glass effects, optimized text colors for contrast, and harmonious color combinations that work seamlessly across different devices and screen sizes.

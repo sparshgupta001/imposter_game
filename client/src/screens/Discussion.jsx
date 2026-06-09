@@ -55,21 +55,8 @@ export default function Discussion() {
 
       {/* Header */}
       <div className="text-center mb-6 animate-slide-up">
-        <h2 className="text-2xl font-bold text-gray-800 mb-1">Discuss! 🗣️</h2>
+        <h2 className="text-2xl font-bold text-gray-800 mb-1">Discussion 💬</h2>
         <p className="text-gray-500 text-sm">Who is the imposter?</p>
-      </div>
-
-      {/* Animated speaking indicator */}
-      <div className="mb-8 animate-float">
-        <div className="flex items-center gap-2">
-          <div className="w-3 h-8 bg-accent rounded-full animate-pulse" style={{ animationDelay: '0s' }} />
-          <div className="w-3 h-12 bg-accent-light rounded-full animate-pulse" style={{ animationDelay: '0.15s' }} />
-          <div className="w-3 h-6 bg-neon-pink rounded-full animate-pulse" style={{ animationDelay: '0.3s' }} />
-          <div className="w-3 h-14 bg-accent rounded-full animate-pulse" style={{ animationDelay: '0.45s' }} />
-          <div className="w-3 h-8 bg-accent-light rounded-full animate-pulse" style={{ animationDelay: '0.6s' }} />
-          <div className="w-3 h-10 bg-neon-pink rounded-full animate-pulse" style={{ animationDelay: '0.75s' }} />
-          <div className="w-3 h-5 bg-accent rounded-full animate-pulse" style={{ animationDelay: '0.9s' }} />
-        </div>
       </div>
 
       {/* Clues Reference */}
@@ -102,7 +89,7 @@ export default function Discussion() {
       <div className="mt-auto pt-6 text-center animate-fade-in">
         <div className="glass-card px-5 py-3 inline-block">
           <p className="text-gray-600 text-sm">
-            Talk it out with your group! 
+            Review the clues with your group.
             <br />
             <span className="text-gray-400 text-xs">Voting starts when the timer ends</span>
           </p>

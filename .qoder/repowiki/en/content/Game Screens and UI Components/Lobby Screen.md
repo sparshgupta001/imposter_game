@@ -6,10 +6,19 @@
 - [GameContext.jsx](file://client/src/context/GameContext.jsx)
 - [useSocket.js](file://client/src/hooks/useSocket.js)
 - [App.jsx](file://client/src/App.jsx)
+- [index.css](file://client/src/index.css)
+- [tailwind.config.js](file://client/tailwind.config.js)
 - [gameManager.js](file://server/gameManager.js)
 - [index.js](file://server/index.js)
 - [topics.js](file://server/topics.js)
 </cite>
+
+## Update Summary
+**Changes Made**
+- Updated styling section to reflect light theme adaptation with new glass card effects
+- Enhanced player indicator documentation with light theme color values
+- Added detailed explanation of light theme color palette and glass effects
+- Updated visual feedback systems to reflect light theme styling
 
 ## Table of Contents
 1. [Introduction](#introduction)
@@ -17,13 +26,16 @@
 3. [Core Components](#core-components)
 4. [Architecture Overview](#architecture-overview)
 5. [Detailed Component Analysis](#detailed-component-analysis)
-6. [Dependency Analysis](#dependency-analysis)
-7. [Performance Considerations](#performance-considerations)
-8. [Troubleshooting Guide](#troubleshooting-guide)
-9. [Conclusion](#conclusion)
+6. [Light Theme Styling System](#light-theme-styling-system)
+7. [Dependency Analysis](#dependency-analysis)
+8. [Performance Considerations](#performance-considerations)
+9. [Troubleshooting Guide](#troubleshooting-guide)
+10. [Conclusion](#conclusion)
 
 ## Introduction
 The Lobby screen is the central hub for multiplayer session management in the Imposter Game. It provides real-time player list management, host controls, and game setup options. This document explains how the lobby integrates with GameContext for state synchronization, handles socket events for live updates, manages player status indicators, displays room codes, and coordinates game start functionality with host privileges.
+
+**Updated** The lobby now features a comprehensive light theme styling system with glass card effects, updated player indicators with light theme color values, and enhanced visual feedback systems designed specifically for light backgrounds.
 
 ## Project Structure
 The lobby implementation spans client-side React components and server-side Socket.IO logic. The client manages UI state and user interactions, while the server maintains authoritative game state and broadcasts updates to all clients.
@@ -35,18 +47,22 @@ A["App.jsx<br/>Renders current phase"]
 B["GameContext.jsx<br/>Global game state & actions"]
 C["useSocket.js<br/>Socket connection & reconnection"]
 D["Lobby.jsx<br/>Lobby UI & interactions"]
+E["index.css<br/>Light theme styling & glass effects"]
+F["tailwind.config.js<br/>Color palette & animations"]
 end
 subgraph "Server"
-E["index.js<br/>Socket.IO server & event handlers"]
-F["gameManager.js<br/>Room lifecycle & game logic"]
-G["topics.js<br/>Word lists by category"]
+G["index.js<br/>Socket.IO server & event handlers"]
+H["gameManager.js<br/>Room lifecycle & game logic"]
+I["topics.js<br/>Word lists by category"]
 end
 A --> B
 B --> C
 B --> D
-C --> E
-E --> F
-E --> G
+C --> G
+G --> H
+G --> I
+D --> E
+D --> F
 ```
 
 **Diagram sources**
@@ -54,6 +70,8 @@ E --> G
 - [GameContext.jsx:12-380](file://client/src/context/GameContext.jsx#L12-L380)
 - [useSocket.js:8-75](file://client/src/hooks/useSocket.js#L8-L75)
 - [Lobby.jsx:56-210](file://client/src/screens/Lobby.jsx#L56-L210)
+- [index.css:111-129](file://client/src/index.css#L111-L129)
+- [tailwind.config.js:1-48](file://client/tailwind.config.js#L1-L48)
 - [index.js:173-676](file://server/index.js#L173-L676)
 - [gameManager.js:9-636](file://server/gameManager.js#L9-L636)
 - [topics.js:4-103](file://server/topics.js#L4-L103)
@@ -63,6 +81,8 @@ E --> G
 - [GameContext.jsx:12-380](file://client/src/context/GameContext.jsx#L12-L380)
 - [useSocket.js:8-75](file://client/src/hooks/useSocket.js#L8-L75)
 - [Lobby.jsx:56-210](file://client/src/screens/Lobby.jsx#L56-L210)
+- [index.css:111-129](file://client/src/index.css#L111-L129)
+- [tailwind.config.js:1-48](file://client/tailwind.config.js#L1-L48)
 - [index.js:173-676](file://server/index.js#L173-L676)
 - [gameManager.js:9-636](file://server/gameManager.js#L9-L636)
 - [topics.js:4-103](file://server/topics.js#L4-L103)
@@ -78,6 +98,8 @@ Key responsibilities:
 - Host controls: Only the host can select category and start the game; UI reflects host privileges.
 - Game start: Validates prerequisites (player count ≥ 4, category selected, host) before emitting startGame.
 - Room code display: Copy-to-clipboard with visual feedback and sharing instructions.
+
+**Updated** The lobby now features enhanced light theme styling with glass card effects, updated player indicators using light theme color values, and improved visual feedback systems optimized for light backgrounds.
 
 **Section sources**
 - [Lobby.jsx:56-210](file://client/src/screens/Lobby.jsx#L56-L210)
@@ -126,9 +148,9 @@ Responsibilities:
 - Responsive player grid with placeholders for empty seats.
 
 Player avatar features:
-- Initials badge with gradient color based on player index.
-- Current player marker ("You") and host indicator.
-- Connectivity overlay with signal icon when disconnected.
+- Initials badge with gradient color based on player index using light theme color palette.
+- Current player marker ("You") and host indicator using neon green accents.
+- Connectivity overlay with signal icon when disconnected using light theme gray tones.
 
 Host controls:
 - Category selection: General, Family, Adult.
@@ -146,9 +168,11 @@ Responsive layout:
 - Animations for fade-in/slide-up effects.
 
 Hover and visual feedback:
-- Hover states on buttons and category cards.
-- Animated glow and scaling for interactive elements.
-- Toast notifications for user actions and system events.
+- Hover states on buttons and category cards with light theme transitions.
+- Animated glow and scaling for interactive elements using accent colors.
+- Toast notifications for user actions and system events with light theme styling.
+
+**Updated** The player avatar component now uses a sophisticated light theme color palette with gradient backgrounds that adapt to the light background. The connectivity overlay utilizes light theme gray values (#e5e5e5) with semi-transparent backgrounds for optimal visibility.
 
 **Section sources**
 - [Lobby.jsx:21-54](file://client/src/screens/Lobby.jsx#L21-L54)
@@ -296,7 +320,7 @@ Layout:
 
 Visual feedback:
 - Toast notifications for joins, leaves, disconnections, and errors.
-- Connection indicator shows live/offline status.
+- Connection indicator shows live/offline status using light theme colors.
 - Start button disabled state with explanatory messages.
 
 **Section sources**
@@ -304,11 +328,66 @@ Visual feedback:
 - [App.jsx:11-37](file://client/src/App.jsx#L11-L37)
 - [App.jsx:39-54](file://client/src/App.jsx#L39-L54)
 
+## Light Theme Styling System
+
+### Color Palette and Design Tokens
+The lobby implements a comprehensive light theme with carefully selected color values optimized for readability and visual comfort:
+
+**Primary Colors:**
+- Light theme base: `#f5f5f5` (light gray) - Used as the primary background
+- Accent colors: `#e94560` (crimson red) - Primary brand color for highlights
+- Neon colors: Various vibrant colors for interactive elements
+
+**Player Indicator Color Scheme:**
+- Gradient backgrounds use light theme compatible colors:
+  - `from-accent to-accent-light` - Primary accent gradients
+  - `from-neon-blue to-neon-purple` - Blue/purple combinations
+  - `from-neon-green to-neon-blue` - Green/blue combinations
+  - `from-neon-purple to-neon-pink` - Purple/pink combinations
+
+**Connection Status Colors:**
+- Disconnected overlay: `rgba(229, 229, 229, 0.6)` - Semi-transparent light gray
+- Current player indicator: `#10b981` (neon green) - Vibrant green for "You" indicator
+- Signal icon: `#e5e5e5` (light gray) - Optimal contrast on light backgrounds
+
+### Glass Card Effects
+The lobby utilizes sophisticated glass morphism effects designed for light themes:
+
+**Glass Card Properties:**
+- Background: `rgba(255, 255, 255, 0.7)` - Semi-transparent white
+- Backdrop filter: `blur(24px)` - Soft blur effect for depth
+- Border: `1px solid rgba(0, 0, 0, 0.06)` - Subtle border for definition
+- Shadow: `0 1px 3px rgba(0, 0, 0, 0.06)` - Minimal shadow for elevation
+
+**Strong Glass Card:**
+- Enhanced version with stronger transparency: `rgba(255, 255, 255, 0.9)`
+- Increased blur: `blur(32px)`
+- Stronger border: `1px solid rgba(0, 0, 0, 0.08)`
+- Enhanced shadow: `0 2px 8px rgba(0, 0, 0, 0.08)`
+
+### Typography and Text Styling
+- Font family: Inter, system-ui, -apple-system, sans-serif
+- Text colors: `#1a1a2e` (dark gray) for primary text
+- Secondary text: `#e5e5e5` (light gray) for secondary information
+- Accent text: `#e94560` (crimson red) for important notifications
+
+### Animation and Interaction States
+- Hover transitions: Smooth color and shadow transitions
+- Active states: Scale transforms for button presses
+- Disabled states: Reduced opacity and lighter colors
+- Loading states: Pulse animations with neon colors
+
+**Section sources**
+- [index.css:111-129](file://client/src/index.css#L111-L129)
+- [index.css:213-217](file://client/src/index.css#L213-L217)
+- [tailwind.config.js:5-9](file://client/tailwind.config.js#L5-L9)
+
 ## Dependency Analysis
 Client dependencies:
 - Lobby depends on GameContext for state and actions.
 - GameContext depends on useSocket for event subscriptions and emits.
 - App renders the current phase and overlays toasts/connection indicator.
+- Styling system relies on Tailwind CSS with custom light theme configurations.
 
 Server dependencies:
 - index.js orchestrates Socket.IO events and delegates to gameManager.
@@ -323,6 +402,8 @@ APP["App.jsx"] --> GC
 US --> SV["server/index.js"]
 SV --> GM["server/gameManager.js"]
 GM --> TOP["server/topics.js"]
+L --> CSS["index.css"]
+L --> TW["tailwind.config.js"]
 ```
 
 **Diagram sources**
@@ -333,6 +414,8 @@ GM --> TOP["server/topics.js"]
 - [index.js:173-676](file://server/index.js#L173-L676)
 - [gameManager.js:9-636](file://server/gameManager.js#L9-L636)
 - [topics.js:4-103](file://server/topics.js#L4-L103)
+- [index.css:111-129](file://client/src/index.css#L111-L129)
+- [tailwind.config.js:1-48](file://client/tailwind.config.js#L1-L48)
 
 **Section sources**
 - [Lobby.jsx:56-210](file://client/src/screens/Lobby.jsx#L56-L210)
@@ -342,12 +425,15 @@ GM --> TOP["server/topics.js"]
 - [index.js:173-676](file://server/index.js#L173-L676)
 - [gameManager.js:9-636](file://server/gameManager.js#L9-L636)
 - [topics.js:4-103](file://server/topics.js#L4-L103)
+- [index.css:111-129](file://client/src/index.css#L111-L129)
+- [tailwind.config.js:1-48](file://client/tailwind.config.js#L1-L48)
 
 ## Performance Considerations
 - Efficient rendering: Player grid uses a fixed-size grid with placeholders to minimize DOM churn.
 - Minimal re-renders: GameContext state updates are consolidated via socket events.
 - Connection resilience: useSocket implements automatic reconnection and graceful fallback.
 - Server scalability: gameManager uses Maps for O(1) lookups and efficient room management.
+- **Updated** Light theme optimization: Glass effects use hardware-accelerated backdrop filters for smooth performance on modern browsers.
 
 ## Troubleshooting Guide
 Common issues and resolutions:
@@ -355,6 +441,7 @@ Common issues and resolutions:
 - Room code not copying: Fallback method uses textarea and execCommand if Clipboard API fails.
 - Disconnection: Player marked as disconnected; reconnect within 30s to remain in the room.
 - Host privileges: Only the host can start the game; if you were host and left, a new host is assigned automatically.
+- **Updated** Light theme rendering issues: Glass effects may not render on older browsers; fallback to solid backgrounds is automatic.
 
 **Section sources**
 - [Lobby.jsx:81-86](file://client/src/screens/Lobby.jsx#L81-L86)
@@ -364,3 +451,5 @@ Common issues and resolutions:
 
 ## Conclusion
 The Lobby screen provides a robust, real-time multiplayer experience with clear host controls, responsive player management, and seamless integration with GameContext and Socket.IO. Its design emphasizes user feedback, accessibility, and smooth transitions between game phases, while the server enforces fairness and integrity through strict host privileges and authoritative state management.
+
+**Updated** The implementation now features a sophisticated light theme styling system with glass morphism effects, optimized player indicators using light theme color values, and enhanced visual feedback systems designed specifically for light backgrounds. The glass card effects utilize hardware-accelerated backdrop filters for smooth performance, while the color palette ensures optimal readability and visual comfort across all interaction states.

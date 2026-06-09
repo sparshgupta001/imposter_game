@@ -1,134 +1,213 @@
 # Imposter Game
 
-A real-time multiplayer party bluffing game. One player is secretly the imposter — everyone else knows the topic. Can you figure out who's faking it?
+A real-time multiplayer social deduction game for phones and browsers. One player is secretly the imposter, everyone else knows the topic, and the group has to use clues, discussion, and voting to find out who is faking it.
 
-## Quick Start
+## Features
+
+- Real-time multiplayer rooms with Socket.io
+- 4-letter room codes for quick sharing
+- Host-controlled category selection
+- Private role reveal for each player
+- One-word clue phase with server-side timers
+- Discussion and voting phases
+- Animated vote reveal and scoreboard
+- Multi-round scoring with final standings
+- Reconnect support after short network drops
+- Mobile-friendly light theme
+- Polling-first Socket.io transport for difficult mobile networks
+- Clean leave-room flow with host reassignment
+
+## Tech Stack
+
+- Frontend: React 18, Vite, Tailwind CSS
+- Backend: Node.js, Express, Socket.io
+- Realtime: Socket.io client/server
+- State: In-memory server rooms
+- UI effects: CSS animations, canvas-confetti
+
+## Installation
+
+Install the backend dependencies:
 
 ```bash
-# Install server dependencies
 cd server
 npm install
-
-# Install client dependencies
-cd ../client
-npm install
-
-# Start the server (in one terminal)
-cd server
-npm run dev
-
-# Start the client (in another terminal)
-cd client
-npm run dev
 ```
 
-Open [http://localhost:5173](http://localhost:5173) on your phone or browser.
+Install the frontend dependencies:
 
-## How to Play
-
-1. **Host creates a room** → gets a 4-letter shareable code (e.g. `KQZM`)
-2. **4–8 players join** via code, pick a display name
-3. **Host picks a category** (General / Family / Adult) and starts the game
-4. **Server assigns one imposter** — they don't know the topic; everyone else does
-5. **Clue phase (60s)** — each player gives a one-word clue
-6. **Discussion (60s)** — open debate about who the imposter is
-7. **Voting** — everyone votes for who they think the imposter is
-8. **Reveal** — votes are shown one-by-one, then the imposter is revealed
-9. **Scoring** — scores accumulate across 3 rounds
-10. **Final standings** — winner gets the crown
-
-## Scoring
-
-| Outcome | Points |
-|---|---|
-| Players correctly vote out imposter | +2 each |
-| Imposter survives the vote | +3 to imposter |
-| Imposter caught but guesses the word | +1 consolation |
+```bash
+cd ../client
+npm install
+```
 
 ## Environment Variables
 
 ### Server
 
 | Variable | Default | Description |
-|---|---|---|
-| `PORT` | `3001` | Server port |
+| --- | --- | --- |
+| `PORT` | `3001` | Port used by the Express and Socket.io server. |
+| `CLIENT_ORIGIN` | `*` | Optional allowed frontend origin. Use the deployed Vercel URL in production. Multiple origins may be comma-separated. |
 
 ### Client
 
 | Variable | Default | Description |
-|---|---|---|
-| `VITE_SERVER_URL` | `http://localhost:3001` | Socket.io server URL |
+| --- | --- | --- |
+| `VITE_SERVER_URL` | `http://localhost:3001` | URL of the Socket.io backend. Set this to the Railway backend URL in production. |
 
-## Deployment
+## Running Locally
 
-### Server → Railway
+Start the backend:
 
-1. Push this repo to GitHub
-2. Go to [Railway](https://railway.app) → New Project → Deploy from GitHub
-3. Set the **Root Directory** to `server`
-4. Add environment variable: `PORT=3001`
-5. Railway will auto-detect Node.js and run `npm start`
-6. Note your Railway URL (e.g. `https://imposter-game-server.up.railway.app`)
+```bash
+cd server
+npm run dev
+```
 
-### Client → Vercel
+Start the frontend in a second terminal:
 
-1. Go to [Vercel](https://vercel.com) → New Project → Import your GitHub repo
-2. Set the **Root Directory** to `client`
-3. Set **Framework Preset** to Vite
-4. Add environment variable: `VITE_SERVER_URL=https://your-railway-app.up.railway.app`
-5. Deploy
+```bash
+cd client
+npm run dev
+```
 
-## Tech Stack
+Open the Vite URL, usually:
 
-- **Frontend:** React 18 + Vite + Tailwind CSS
-- **Backend:** Node.js + Express + Socket.io
-- **State:** In-memory (no database needed)
-- **Animations:** CSS transitions + canvas-confetti
+```text
+http://localhost:5173
+```
+
+For phone testing on the same network, expose the Vite dev server with a host flag and set the client to use a reachable backend URL.
+
+## Production Build
+
+Build the frontend:
+
+```bash
+cd client
+npm run build
+```
+
+Preview the frontend build:
+
+```bash
+npm run preview
+```
+
+Start the backend:
+
+```bash
+cd server
+npm start
+```
+
+The backend health check is available at:
+
+```text
+GET /
+```
+
+Expected response:
+
+```json
+{"status":"ok","rooms":0}
+```
+
+## Gameplay
+
+1. A host creates a room and receives a 4-letter code.
+2. Players join with the room code and a display name.
+3. The host selects a category and starts the game.
+4. The server chooses one imposter and one secret topic.
+5. Non-imposters see the topic. The imposter does not.
+6. Each player submits a one-word clue.
+7. The group reviews the clues and decides who seems suspicious.
+8. Each player votes for another player.
+9. Votes are revealed, then the imposter is revealed.
+10. Scores update over 3 rounds, then final standings are shown.
+
+## Scoring
+
+| Outcome | Points |
+| --- | --- |
+| Players correctly vote out the imposter | +2 to each correct voter |
+| Imposter survives the vote | +3 to the imposter |
+| Caught imposter correctly guesses the topic | +1 consolation point |
 
 ## Project Structure
 
+```text
+Imposter_game/
+  ai-logs/
+    README.md
+  client/
+    index.html
+    package.json
+    scripts/
+      build.mjs
+    src/
+      App.jsx
+      index.css
+      context/
+        GameContext.jsx
+      hooks/
+        useSocket.js
+      screens/
+        Home.jsx
+        Lobby.jsx
+        RoleReveal.jsx
+        CluePhase.jsx
+        Discussion.jsx
+        Voting.jsx
+        Results.jsx
+  server/
+    index.js
+    gameManager.js
+    topics.js
+    package.json
+  README.md
 ```
-imposter-game/
-├── server/
-│   ├── index.js          # Express + Socket.io server
-│   ├── gameManager.js    # Room/game state machine
-│   └── topics.js         # Word packs (30+ per category)
-├── client/
-│   ├── src/
-│   │   ├── App.jsx              # Screen router + transitions
-│   │   ├── screens/
-│   │   │   ├── Home.jsx         # Create / join room
-│   │   │   ├── Lobby.jsx        # Player list, category picker
-│   │   │   ├── RoleReveal.jsx   # Tap-to-reveal role card
-│   │   │   ├── CluePhase.jsx    # Timer + clue input
-│   │   │   ├── Discussion.jsx   # Timer + clue review
-│   │   │   ├── Voting.jsx       # Tap-to-vote UI
-│   │   │   └── Results.jsx      # Staggered reveal + scoreboard
-│   │   ├── hooks/useSocket.js   # Socket.io connection hook
-│   │   └── context/GameContext.jsx  # Global state + actions
-│   └── index.html
-└── README.md
+
+## Deployment
+
+### Backend on Railway
+
+1. Create a Railway project from the GitHub repository.
+2. Set the Railway root directory to `server`.
+3. Set `PORT` if Railway does not provide one automatically.
+4. Set `CLIENT_ORIGIN` to the deployed frontend URL for tighter CORS.
+5. Deploy with the default start command:
+
+```bash
+npm start
 ```
 
-## Socket Events
+### Frontend on Vercel
 
-| Client → Server | Data | Response |
-|---|---|---|
-| `createRoom` | `{ playerName }` | `roomCreated { code }` |
-| `joinRoom` | `{ code, name }` | `playerJoined { players }` |
-| `startGame` | `{ category }` | `roleAssigned { role, topic? }` (per socket) |
-| `submitClue` | `{ clue }` | `clueReceived { playerId, clue }` |
-| `submitVote` | `{ targetId }` | `voteSubmitted { voterId }` |
-| `imposterGuess` | `{ guess }` | `imposterGuessResult { correct }` |
-| `nextRound` | — | `phaseChanged` / `gameOver` |
-| `playAgain` | — | `phaseChanged { phase: 'lobby' }` |
-| `reconnect` | `{ code, name }` | `reconnected { ...state }` |
+1. Import the GitHub repository into Vercel.
+2. Set the Vercel root directory to `client`.
+3. Set the framework preset to Vite.
+4. Set `VITE_SERVER_URL` to the Railway backend URL.
+5. Build with:
 
-| Server → Client | Data |
-|---|---|
-| `timerTick` | `{ secondsLeft }` |
-| `phaseChanged` | `{ phase }` |
-| `roundResult` | `{ imposterId, wasImposter, scores, votes, topic }` |
-| `gameOver` | `{ players, winner }` |
-| `playerDisconnected` | `{ playerId, playerName, players }` |
-| `playerReconnected` | `{ playerId, playerName, players }` |
+```bash
+npm run build
+```
+
+The frontend build script uses Vite programmatically for production and skips loading the dev-only Vite config file. Local development still uses `vite.config.js` for the `/socket.io` proxy.
+
+## Known Limitations
+
+- Rooms are stored in memory, so restarting the backend clears active rooms.
+- Horizontal scaling needs sticky sessions or a shared Socket.io adapter.
+- There is no account system or persistent leaderboard.
+- The game is optimized for small groups of 4 to 8 players.
+- Voice chat is not built in; discussion happens outside the app.
+- If a player disconnects, they have a short grace period to reconnect before being removed.
+
+## Credits
+
+Built as an AI-assisted coding contest submission.
+
+Development assistance included AI coding tools, with final audit and fixes performed in Codex.

@@ -57,6 +57,7 @@ export default function Lobby() {
   const { roomCode, players, isHost, startGame, leaveGame, playerId, addToast } = useGame();
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [copied, setCopied] = useState(false);
+  const connectedPlayers = players.filter((player) => player.connected !== false);
 
   const handleCopy = useCallback(async () => {
     if (!roomCode) return;
@@ -78,7 +79,7 @@ export default function Lobby() {
     }
   }, [roomCode, addToast]);
 
-  const canStart = players.length >= 4 && selectedCategory && isHost;
+  const canStart = connectedPlayers.length >= 4 && selectedCategory && isHost;
 
   const handleStart = () => {
     if (!canStart) return;
@@ -96,7 +97,7 @@ export default function Lobby() {
           ← Leave
         </button>
         <div className="text-xs text-gray-400 font-medium">
-          {players.length}/8 players
+          {connectedPlayers.length}/8 players
         </div>
       </div>
 
@@ -124,11 +125,11 @@ export default function Lobby() {
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-sm font-semibold text-gray-700">Players</h3>
           <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${
-            players.length >= 4
+            connectedPlayers.length >= 4
               ? 'bg-emerald-50 text-emerald-600'
               : 'bg-yellow-50 text-yellow-600'
           }`}>
-            {players.length < 4 ? `Need ${4 - players.length} more` : 'Ready!'}
+            {connectedPlayers.length < 4 ? `Need ${4 - connectedPlayers.length} more` : 'Ready!'}
           </span>
         </div>
         <div className="grid grid-cols-4 gap-4">
@@ -188,8 +189,8 @@ export default function Lobby() {
                 : 'bg-gray-100 text-gray-400 cursor-not-allowed'
             }`}
           >
-            {players.length < 4
-              ? `Need ${4 - players.length} more players`
+            {connectedPlayers.length < 4
+              ? `Need ${4 - connectedPlayers.length} more players`
               : !selectedCategory
               ? 'Select a category'
               : 'Start Game 🚀'}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useGame } from '../context/GameContext';
 
 const AVATAR_COLORS = [
@@ -58,7 +58,15 @@ export default function Voting() {
   const [selectedId, setSelectedId] = useState(null);
   const totalTime = 45;
 
-  const otherPlayers = players.filter((p) => p.id !== playerId);
+  const connectedPlayers = players.filter((p) => p.connected !== false);
+  const otherPlayers = connectedPlayers.filter((p) => p.id !== playerId);
+
+  useEffect(() => {
+    const selectedPlayer = players.find((player) => player.id === selectedId);
+    if (selectedId && (!selectedPlayer || selectedPlayer.connected === false)) {
+      setSelectedId(null);
+    }
+  }, [players, selectedId]);
 
   const handleSelect = (id) => {
     if (hasVoted) return;
@@ -141,7 +149,7 @@ export default function Voting() {
       {votedPlayers.length > 0 && (
         <div className="w-full max-w-sm mb-4 animate-fade-in">
           <p className="text-xs text-gray-400 text-center">
-            {votedPlayers.length}/{players.length} votes locked in
+            {votedPlayers.length}/{connectedPlayers.length} votes locked in
           </p>
         </div>
       )}

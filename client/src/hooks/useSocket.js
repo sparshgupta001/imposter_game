@@ -7,6 +7,7 @@ let globalSocket = null;
 
 export default function useSocket() {
   const [connected, setConnected] = useState(false);
+  const [socketInstance, setSocketInstance] = useState(null);
   const socketRef = useRef(null);
 
   const getSocket = useCallback(() => {
@@ -34,6 +35,7 @@ export default function useSocket() {
   useEffect(() => {
     const socket = getSocket();
     socketRef.current = socket;
+    setSocketInstance(socket);
 
     const onConnect = () => {
       setConnected(true);
@@ -71,5 +73,5 @@ export default function useSocket() {
     };
   }, [getSocket]);
 
-  return { socket: socketRef.current || getSocket(), connected };
+  return { socket: socketInstance, connected };
 }

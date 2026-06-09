@@ -13,6 +13,13 @@
 - [topics.js](file://server/topics.js)
 </cite>
 
+## Update Summary
+**Changes Made**
+- Updated styling section to reflect light theme implementation with enhanced color contrasts
+- Added documentation for improved glass card effects and background gradients
+- Updated visual styling to highlight light theme optimizations
+- Enhanced accessibility features documentation for light theme compliance
+
 ## Table of Contents
 1. [Introduction](#introduction)
 2. [Project Structure](#project-structure)
@@ -25,7 +32,7 @@
 9. [Conclusion](#conclusion)
 
 ## Introduction
-The Role Reveal screen displays each player’s role privately after the game starts. It features a flip-card animation, dynamic background glow based on role, a countdown timer, and responsive design. The screen integrates tightly with the game state management and socket events to orchestrate automatic transitions and role distribution.
+The Role Reveal screen displays each player's role privately after the game starts. It features a flip-card animation, dynamic background glow based on role, a countdown timer, and responsive design optimized for light themes. The screen integrates tightly with the game state management and socket events to orchestrate automatic transitions and role distribution.
 
 ## Project Structure
 The Role Reveal screen is part of the client-side React application and interacts with the server via Socket.IO. The game flow is managed centrally in the GameContext provider, which subscribes to socket events emitted by the server.
@@ -55,22 +62,22 @@ SIO --> RR
 ```
 
 **Diagram sources**
-- [RoleReveal.jsx:1-123](file://client/src/screens/RoleReveal.jsx#L1-L123)
+- [RoleReveal.jsx:1-122](file://client/src/screens/RoleReveal.jsx#L1-L122)
 - [GameContext.jsx:1-383](file://client/src/context/GameContext.jsx#L1-L383)
 - [App.jsx:1-101](file://client/src/App.jsx#L1-L101)
 - [useSocket.js:1-76](file://client/src/hooks/useSocket.js#L1-L76)
-- [index.css:1-215](file://client/src/index.css#L1-L215)
+- [index.css:1-217](file://client/src/index.css#L1-L217)
 - [tailwind.config.js:1-48](file://client/tailwind.config.js#L1-L48)
 - [index.js:1-687](file://server/index.js#L1-L687)
 - [gameManager.js:1-636](file://server/gameManager.js#L1-L636)
 - [topics.js:1-104](file://server/topics.js#L1-L104)
 
 **Section sources**
-- [RoleReveal.jsx:1-123](file://client/src/screens/RoleReveal.jsx#L1-L123)
+- [RoleReveal.jsx:1-122](file://client/src/screens/RoleReveal.jsx#L1-L122)
 - [GameContext.jsx:1-383](file://client/src/context/GameContext.jsx#L1-L383)
 - [App.jsx:1-101](file://client/src/App.jsx#L1-L101)
 - [useSocket.js:1-76](file://client/src/hooks/useSocket.js#L1-L76)
-- [index.css:1-215](file://client/src/index.css#L1-L215)
+- [index.css:1-217](file://client/src/index.css#L1-L217)
 - [tailwind.config.js:1-48](file://client/tailwind.config.js#L1-L48)
 - [index.js:1-687](file://server/index.js#L1-L687)
 - [gameManager.js:1-636](file://server/gameManager.js#L1-L636)
@@ -84,7 +91,7 @@ SIO --> RR
 - Server game loop: Orchestrates role assignment, emits role events, and runs a 10-second reveal timer before advancing to the next phase.
 
 **Section sources**
-- [RoleReveal.jsx:4-123](file://client/src/screens/RoleReveal.jsx#L4-L123)
+- [RoleReveal.jsx:4-122](file://client/src/screens/RoleReveal.jsx#L4-L122)
 - [GameContext.jsx:12-254](file://client/src/context/GameContext.jsx#L12-L254)
 - [App.jsx:56-100](file://client/src/App.jsx#L56-L100)
 - [useSocket.js:8-75](file://client/src/hooks/useSocket.js#L8-L75)
@@ -154,7 +161,7 @@ Hint --> End(["Idle until phase change"])
 - [RoleReveal.jsx:115-119](file://client/src/screens/RoleReveal.jsx#L115-L119)
 
 **Section sources**
-- [RoleReveal.jsx:4-123](file://client/src/screens/RoleReveal.jsx#L4-L123)
+- [RoleReveal.jsx:4-122](file://client/src/screens/RoleReveal.jsx#L4-L122)
 
 ### Private Role Distribution Mechanism
 The server assigns roles privately to each player upon game start:
@@ -225,6 +232,8 @@ EmitNextPhase --> End(["Advance complete"])
 - Pulse ring and floating elements: Animated prompts for interaction.
 - Screen transitions: Fade/slide transition when changing phases.
 
+**Updated** Enhanced light theme styling with improved color contrasts and glass effects optimized for light backgrounds.
+
 ```mermaid
 classDiagram
 class RoleReveal {
@@ -240,10 +249,15 @@ class CSS_FlipCard {
 +flip-card-back
 +flipped
 }
+class CSS_GlassEffects {
++glass-card
++glass-card-strong
++bg-game-gradient
+}
 class CSS_GlowEffects {
 +glow-red
 +glow-green
-+background-blur
++glow-blue
 }
 class TailwindAnimations {
 +pulse-ring
@@ -251,20 +265,21 @@ class TailwindAnimations {
 +float
 }
 RoleReveal --> CSS_FlipCard : "uses"
+RoleReveal --> CSS_GlassEffects : "uses"
 RoleReveal --> CSS_GlowEffects : "uses"
 RoleReveal --> TailwindAnimations : "uses"
 ```
 
 **Diagram sources**
 - [RoleReveal.jsx:18-122](file://client/src/screens/RoleReveal.jsx#L18-L122)
-- [index.css:128-150](file://client/src/index.css#L128-L150)
-- [index.css:152-159](file://client/src/index.css#L152-L159)
+- [index.css:111-165](file://client/src/index.css#L111-L165)
+- [index.css:213-217](file://client/src/index.css#L213-L217)
 - [tailwind.config.js:10-43](file://client/tailwind.config.js#L10-L43)
 
 **Section sources**
 - [RoleReveal.jsx:18-122](file://client/src/screens/RoleReveal.jsx#L18-L122)
-- [index.css:128-150](file://client/src/index.css#L128-L150)
-- [index.css:152-159](file://client/src/index.css#L152-L159)
+- [index.css:111-165](file://client/src/index.css#L111-L165)
+- [index.css:213-217](file://client/src/index.css#L213-L217)
 - [tailwind.config.js:10-43](file://client/tailwind.config.js#L10-L43)
 
 ### Countdown Timer Implementation
@@ -347,10 +362,14 @@ GameCtx-->>App : "setPhase('clue')"
 ### Accessibility Features
 - Keyboard focus indicators: Tailwind utilities provide visible focus states.
 - Reduced motion support: Animations use Tailwind defaults suitable for reduced motion preferences.
-- Color contrast: Role-specific glows and backgrounds meet contrast guidelines for readability.
+- Color contrast: Role-specific glows and backgrounds meet contrast guidelines for readability on light backgrounds.
 - Semantic structure: Headings and paragraphs provide clear content hierarchy.
+- Light theme optimization: Enhanced contrast ratios with light gray backgrounds (#f5f5f5) and dark text (#1a1a2e).
+
+**Updated** Enhanced accessibility with improved color contrast ratios optimized for light theme backgrounds.
 
 **Section sources**
+- [index.css:11-19](file://client/src/index.css#L11-L19)
 - [index.css:111-126](file://client/src/index.css#L111-L126)
 - [tailwind.config.js:5-9](file://client/tailwind.config.js#L5-L9)
 
@@ -373,20 +392,20 @@ GM --> TOP["topics.js"]
 ```
 
 **Diagram sources**
-- [RoleReveal.jsx:1-123](file://client/src/screens/RoleReveal.jsx#L1-L123)
+- [RoleReveal.jsx:1-122](file://client/src/screens/RoleReveal.jsx#L1-L122)
 - [GameContext.jsx:1-383](file://client/src/context/GameContext.jsx#L1-L383)
 - [useSocket.js:1-76](file://client/src/hooks/useSocket.js#L1-L76)
-- [index.css:1-215](file://client/src/index.css#L1-L215)
+- [index.css:1-217](file://client/src/index.css#L1-L217)
 - [tailwind.config.js:1-48](file://client/tailwind.config.js#L1-L48)
 - [index.js:1-687](file://server/index.js#L1-L687)
 - [gameManager.js:1-636](file://server/gameManager.js#L1-L636)
 - [topics.js:1-104](file://server/topics.js#L1-L104)
 
 **Section sources**
-- [RoleReveal.jsx:1-123](file://client/src/screens/RoleReveal.jsx#L1-L123)
+- [RoleReveal.jsx:1-122](file://client/src/screens/RoleReveal.jsx#L1-L122)
 - [GameContext.jsx:1-383](file://client/src/context/GameContext.jsx#L1-L383)
 - [useSocket.js:1-76](file://client/src/hooks/useSocket.js#L1-L76)
-- [index.css:1-215](file://client/src/index.css#L1-L215)
+- [index.css:1-217](file://client/src/index.css#L1-L217)
 - [tailwind.config.js:1-48](file://client/tailwind.config.js#L1-L48)
 - [index.js:1-687](file://server/index.js#L1-L687)
 - [gameManager.js:1-636](file://server/gameManager.js#L1-L636)
@@ -397,12 +416,14 @@ GM --> TOP["topics.js"]
 - Minimal re-renders: RoleReveal uses local state for reveal toggle and derives visuals from props.
 - Lightweight animations: CSS transforms and opacity transitions are GPU-friendly.
 - Server-side timers: Single interval per room prevents redundant timers.
+- Optimized light theme: Enhanced glass effects with appropriate backdrop blur for performance.
 
 ## Troubleshooting Guide
 - Roles not displaying: Verify "roleAssigned" events are received and that the client sets role/topic and phase accordingly.
 - Timer not updating: Confirm "timerTick" events are emitted and that GameContext updates the timer state.
 - Auto-advance not happening: Ensure the 10-second timer completes and "phaseChanged" to "clue" is emitted.
 - Flip animation issues: Check Tailwind flip-card classes and ensure the flipped class toggles correctly.
+- Light theme contrast issues: Verify color contrast ratios meet accessibility guidelines on light backgrounds.
 
 **Section sources**
 - [GameContext.jsx:130-140](file://client/src/context/GameContext.jsx#L130-L140)
@@ -410,4 +431,4 @@ GM --> TOP["topics.js"]
 - [RoleReveal.jsx:43-44](file://client/src/screens/RoleReveal.jsx#L43-L44)
 
 ## Conclusion
-The Role Reveal screen provides a polished, immersive experience with private role delivery, smooth animations, and seamless integration with the game state and server timers. Its modular design ensures maintainability and extensibility for future enhancements.
+The Role Reveal screen provides a polished, immersive experience with private role delivery, smooth animations, and seamless integration with the game state and server timers. Its modular design ensures maintainability and extensibility for future enhancements. The recent light theme optimizations improve visual accessibility and user experience across different display conditions while maintaining the component's core functionality and aesthetic appeal.

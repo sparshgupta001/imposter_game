@@ -155,8 +155,8 @@ export default function Results() {
   };
 
   const displayPlayers = isFinal
-    ? (finalScores.length > 0 ? finalScores : players).sort((a, b) => (b.score || 0) - (a.score || 0))
-    : (roundResult?.players || players).sort((a, b) => (b.score || 0) - (a.score || 0));
+    ? [...(finalScores.length > 0 ? finalScores : players)].sort((a, b) => (b.score || 0) - (a.score || 0))
+    : [...(roundResult?.players || players)].sort((a, b) => (b.score || 0) - (a.score || 0));
 
   // === FINAL RESULTS SCREEN ===
   if (isFinal) {
