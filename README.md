@@ -1,40 +1,73 @@
 # Imposter Game
 
-A real-time multiplayer social deduction game for phones and browsers. One player is secretly the imposter, everyone else knows the topic, and the group has to use clues, discussion, and voting to find out who is faking it.
+A real-time multiplayer social deduction game built with React, Express, and Socket.io. One player is secretly the imposter, everyone else knows the topic, and the group must use clues, live discussion chat, and voting to uncover the imposter before the round ends.
 
 ## Features
 
-- Real-time multiplayer rooms with Socket.io
-- 4-letter room codes for quick sharing
-- Host-controlled category selection
-- Private role reveal for each player
-- One-word clue phase with server-side timers
-- Discussion and voting phases
-- Animated vote reveal and scoreboard
-- Multi-round scoring with final standings
-- Reconnect support after short network drops
-- Mobile-friendly light theme
-- Polling-first Socket.io transport for difficult mobile networks
-- Clean leave-room flow with host reassignment
+* Real-time multiplayer rooms powered by Socket.io
+* 4-letter shareable room codes
+* Host-controlled game flow and category selection
+* Private role reveal for each player
+* Random imposter assignment performed server-side
+* One-word clue phase with server-authoritative timers
+* Real-time discussion phase with live in-game chat
+* 30-second discussion timer
+* Voting system with locked-in votes
+* Animated vote reveal and imposter reveal
+* Multi-round scoring system
+* Final leaderboard after all rounds
+* Reconnection support for temporary network drops
+* Mobile-first responsive design
+* Modern light-theme UI
+* Polling-first Socket.io transport for improved mobile compatibility
+* Retry connection flow for unstable networks
+* Host reassignment when hosts leave rooms
+* Automatic player cleanup and room lifecycle management
+* Toast notifications for important game events
 
 ## Tech Stack
 
-- Frontend: React 18, Vite, Tailwind CSS
-- Backend: Node.js, Express, Socket.io
-- Realtime: Socket.io client/server
-- State: In-memory server rooms
-- UI effects: CSS animations, canvas-confetti
+### Frontend
+
+* React 18
+* Vite
+* Tailwind CSS
+* Socket.io Client
+* Canvas Confetti
+
+### Backend
+
+* Node.js
+* Express
+* Socket.io
+
+### Deployment
+
+* Vercel (Frontend)
+* Railway (Backend)
+
+### State Management
+
+* React Context API
+* In-memory room and game state on the server
 
 ## Installation
 
-Install the backend dependencies:
+### Clone Repository
+
+```bash
+git clone https://github.com/sparshgupta001/imposter_game.git
+cd imposter_game
+```
+
+### Install Backend Dependencies
 
 ```bash
 cd server
 npm install
 ```
 
-Install the frontend dependencies:
+### Install Frontend Dependencies
 
 ```bash
 cd ../client
@@ -45,169 +78,374 @@ npm install
 
 ### Server
 
-| Variable | Default | Description |
-| --- | --- | --- |
-| `PORT` | `3001` | Port used by the Express and Socket.io server. |
-| `CLIENT_ORIGIN` | `*` | Optional allowed frontend origin. Use the deployed Vercel URL in production. Multiple origins may be comma-separated. |
+Create a `.env` file inside the `server` directory if required.
+
+| Variable      | Default | Description                                                         |
+| ------------- | ------- | ------------------------------------------------------------------- |
+| PORT          | 3001    | Express and Socket.io server port                                   |
+| CLIENT_ORIGIN | *       | Allowed frontend origin for CORS. Use your Vercel URL in production |
+
+Example:
+
+```env
+PORT=3001
+CLIENT_ORIGIN=http://localhost:5173
+```
 
 ### Client
 
-| Variable | Default | Description |
-| --- | --- | --- |
-| `VITE_SERVER_URL` | `http://localhost:3001` | URL of the Socket.io backend. Set this to the Railway backend URL in production. |
+Create a `.env.local` file inside the `client` directory.
+
+| Variable        | Default               | Description                  |
+| --------------- | --------------------- | ---------------------------- |
+| VITE_SERVER_URL | http://localhost:3001 | Backend Socket.io server URL |
+
+Example:
+
+```env
+VITE_SERVER_URL=http://localhost:3001
+```
+
+Production example:
+
+```env
+VITE_SERVER_URL=https://your-app.up.railway.app
+```
 
 ## Running Locally
 
-Start the backend:
+### Start Backend
 
 ```bash
 cd server
 npm run dev
 ```
 
-Start the frontend in a second terminal:
+Backend runs on:
+
+```text
+http://localhost:3001
+```
+
+### Start Frontend
+
+Open a second terminal:
 
 ```bash
 cd client
 npm run dev
 ```
 
-Open the Vite URL, usually:
+Frontend runs on:
 
 ```text
 http://localhost:5173
 ```
 
-For phone testing on the same network, expose the Vite dev server with a host flag and set the client to use a reachable backend URL.
+### Mobile Testing
+
+To test from phones connected to the same network:
+
+```bash
+npm run dev -- --host 0.0.0.0
+```
+
+Find your computer IP:
+
+```bash
+ipconfig
+```
+
+Set:
+
+```env
+VITE_SERVER_URL=http://YOUR_LOCAL_IP:3001
+```
+
+Example:
+
+```env
+VITE_SERVER_URL=http://192.168.1.5:3001
+```
 
 ## Production Build
 
-Build the frontend:
+### Build Frontend
 
 ```bash
 cd client
 npm run build
 ```
 
-Preview the frontend build:
+### Preview Frontend Build
 
 ```bash
 npm run preview
 ```
 
-Start the backend:
+### Start Backend
 
 ```bash
 cd server
 npm start
 ```
 
-The backend health check is available at:
+## Health Check
 
-```text
+Backend exposes a health endpoint:
+
+```http
 GET /
 ```
 
 Expected response:
 
 ```json
-{"status":"ok","rooms":0}
+{
+  "status": "ok",
+  "rooms": 0
+}
 ```
 
 ## Gameplay
 
-1. A host creates a room and receives a 4-letter code.
-2. Players join with the room code and a display name.
-3. The host selects a category and starts the game.
-4. The server chooses one imposter and one secret topic.
-5. Non-imposters see the topic. The imposter does not.
-6. Each player submits a one-word clue.
-7. The group reviews the clues and decides who seems suspicious.
-8. Each player votes for another player.
-9. Votes are revealed, then the imposter is revealed.
-10. Scores update over 3 rounds, then final standings are shown.
+### 1. Create Room
 
-## Scoring
+A host creates a room and receives a unique 4-letter room code.
 
-| Outcome | Points |
-| --- | --- |
-| Players correctly vote out the imposter | +2 to each correct voter |
-| Imposter survives the vote | +3 to the imposter |
-| Caught imposter correctly guesses the topic | +1 consolation point |
+### 2. Join Room
+
+Players enter:
+
+* Room code
+* Display name
+
+Supported player count:
+
+```text
+4–8 Players
+```
+
+### 3. Select Category
+
+Available categories:
+
+* 🌍 General
+* 👨‍👩‍👧 Family
+* 🔞 Adult
+
+### 4. Role Assignment
+
+The server randomly assigns:
+
+* 1 Imposter
+* Remaining players receive the secret topic
+
+Only non-imposters can see the topic.
+
+### 5. Clue Phase
+
+Each player submits a one-word clue related to the topic.
+
+### 6. Discussion Phase
+
+Players enter a 30-second discussion round.
+
+Features:
+
+* Live chat system
+* Real-time message delivery
+* Message synchronization across all players
+* Auto-cleared between rounds
+
+### 7. Voting Phase
+
+Players vote for who they believe is the imposter.
+
+* One vote per player
+* Votes lock once submitted
+
+### 8. Results Phase
+
+The game reveals:
+
+* Vote breakdown
+* Eliminated player
+* Whether the eliminated player was the imposter
+
+### 9. Score Update
+
+Scores are updated automatically.
+
+### 10. Final Leaderboard
+
+After the configured number of rounds, final standings are displayed and a winner is crowned.
+
+## Scoring System
+
+| Outcome                                 | Points |
+| --------------------------------------- | ------ |
+| Correctly vote for the imposter         | +2     |
+| Imposter survives voting                | +3     |
+| Caught imposter correctly guesses topic | +1     |
 
 ## Project Structure
 
 ```text
 Imposter_game/
-  ai-logs/
-    README.md
-  client/
-    index.html
-    package.json
-    scripts/
-      build.mjs
-    src/
-      App.jsx
-      index.css
-      context/
-        GameContext.jsx
-      hooks/
-        useSocket.js
-      screens/
-        Home.jsx
-        Lobby.jsx
-        RoleReveal.jsx
-        CluePhase.jsx
-        Discussion.jsx
-        Voting.jsx
-        Results.jsx
-  server/
-    index.js
-    gameManager.js
-    topics.js
-    package.json
-  README.md
+│
+├── ai-logs/
+│   ├── README.md
+│   ├── qoder-session-1.md
+│   ├── qoder-session-2.md
+│   ├── qoder-session-3.md
+│   └── codex-audit.md
+│
+├── client/
+│   ├── index.html
+│   ├── package.json
+│   ├── scripts/
+│   │   └── build.mjs
+│   └── src/
+│       ├── App.jsx
+│       ├── index.css
+│       ├── context/
+│       │   └── GameContext.jsx
+│       ├── hooks/
+│       │   └── useSocket.js
+│       └── screens/
+│           ├── Home.jsx
+│           ├── Lobby.jsx
+│           ├── RoleReveal.jsx
+│           ├── CluePhase.jsx
+│           ├── Discussion.jsx
+│           ├── Voting.jsx
+│           └── Results.jsx
+│
+├── server/
+│   ├── index.js
+│   ├── gameManager.js
+│   ├── topics.js
+│   └── package.json
+│
+└── README.md
 ```
 
 ## Deployment
 
-### Backend on Railway
+### Deploy Backend on Railway
 
-1. Create a Railway project from the GitHub repository.
-2. Set the Railway root directory to `server`.
-3. Set `PORT` if Railway does not provide one automatically.
-4. Set `CLIENT_ORIGIN` to the deployed frontend URL for tighter CORS.
-5. Deploy with the default start command:
+1. Create a new Railway project.
+2. Connect the GitHub repository.
+3. Set Root Directory:
+
+```text
+server
+```
+
+4. Configure environment variables:
+
+```env
+CLIENT_ORIGIN=https://your-app.vercel.app
+```
+
+5. Deploy using:
 
 ```bash
 npm start
 ```
 
-### Frontend on Vercel
+6. Copy the Railway public URL.
 
-1. Import the GitHub repository into Vercel.
-2. Set the Vercel root directory to `client`.
-3. Set the framework preset to Vite.
-4. Set `VITE_SERVER_URL` to the Railway backend URL.
-5. Build with:
+Example:
+
+```text
+https://your-app.up.railway.app
+```
+
+### Deploy Frontend on Vercel
+
+1. Import the GitHub repository.
+2. Set Root Directory:
+
+```text
+client
+```
+
+3. Framework:
+
+```text
+Vite
+```
+
+4. Configure:
+
+```env
+VITE_SERVER_URL=https://your-app.up.railway.app
+```
+
+5. Build Command:
 
 ```bash
 npm run build
 ```
 
-The frontend build script uses Vite programmatically for production and skips loading the dev-only Vite config file. Local development still uses `vite.config.js` for the `/socket.io` proxy.
+6. Output Directory:
+
+```text
+dist
+```
+
+7. Deploy.
+
+## Multiplayer & Networking Notes
+
+The game uses:
+
+* Polling-first Socket.io transport
+* Automatic WebSocket upgrade when available
+* Infinite reconnection attempts
+* Extended connection timeout
+* Retry button for failed connections
+* Graceful leave-room handling
+* Host reassignment when required
+* Automatic cleanup of disconnected players
+
+These improvements were added to improve compatibility across mobile browsers, public WiFi, and restrictive networks.
 
 ## Known Limitations
 
-- Rooms are stored in memory, so restarting the backend clears active rooms.
-- Horizontal scaling needs sticky sessions or a shared Socket.io adapter.
-- There is no account system or persistent leaderboard.
-- The game is optimized for small groups of 4 to 8 players.
-- Voice chat is not built in; discussion happens outside the app.
-- If a player disconnects, they have a short grace period to reconnect before being removed.
+* All room data is stored in memory.
+* Server restarts remove active rooms.
+* No persistent user accounts.
+* No permanent leaderboard.
+* No database integration.
+* Chat messages are not stored after a round ends.
+* Horizontal scaling would require a shared Socket.io adapter such as Redis.
+* Optimized for groups of 4–8 players.
+* Voice chat is not built into the application.
+
+## Future Improvements
+
+* Persistent user profiles
+* Global leaderboard
+* Spectator mode
+* Custom topic packs
+* Admin moderation tools
+* Private room settings
+* Friend invitations
+* Database-backed game history
+* Optional voice-chat integration
 
 ## Credits
 
 Built as an AI-assisted coding contest submission.
 
-Development assistance included AI coding tools, with final audit and fixes performed in Codex.
+### Development Assistance
+
+* Qoder: project scaffolding, multiplayer systems, deployment guidance, networking improvements, UI redesign, and gameplay iteration.
+* Codex: final audit, multiplayer cleanup fixes, accessibility improvements, production-readiness review, and documentation refinement.
+
+## License
+
+This project is provided for educational and demonstration purposes.
