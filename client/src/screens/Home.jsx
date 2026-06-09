@@ -45,7 +45,7 @@ export default function Home() {
       {FLOATING_EMOJIS.map((item, i) => (
         <div
           key={i}
-          className="absolute text-3xl opacity-20 pointer-events-none select-none animate-float"
+          className="absolute text-3xl opacity-15 pointer-events-none select-none animate-float"
           style={{
             top: item.top,
             left: item.left,
@@ -71,24 +71,24 @@ export default function Home() {
             background: 'linear-gradient(135deg, #e94560, #ff6b81, #ec4899)',
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent',
-            filter: 'drop-shadow(0 0 30px rgba(233,69,96,0.4))',
+            filter: 'drop-shadow(0 2px 8px rgba(233,69,96,0.2))',
           }}
         >
           IMPOSTER
         </h1>
-        <p className="text-gray-400 text-lg font-medium tracking-wide">
+        <p className="text-gray-500 text-lg font-medium tracking-wide">
           Who&apos;s faking it?
         </p>
       </div>
 
       {/* Connection warning */}
       {!connected && (
-        <div className="mb-4 px-4 py-3 rounded-lg bg-red-500/10 border border-red-500/20 text-center animate-fade-in">
-          <p className="text-red-300 text-sm mb-2">Connecting to server...</p>
-          <p className="text-red-400/60 text-xs mb-2">Make sure you have internet access</p>
+        <div className="mb-4 px-4 py-3 rounded-lg bg-red-50 border border-red-200 text-center animate-fade-in">
+          <p className="text-red-600 text-sm mb-2">Connecting to server...</p>
+          <p className="text-red-400 text-xs mb-2">Make sure you have internet access</p>
           <button
             onClick={() => window.location.reload()}
-            className="text-xs text-red-300 underline underline-offset-2 hover:text-white transition-colors"
+            className="text-xs text-red-500 underline underline-offset-2 hover:text-red-700 transition-colors"
           >
             Retry
           </button>
@@ -97,7 +97,7 @@ export default function Home() {
 
       {/* Error */}
       {error && (
-        <div className="mb-4 px-4 py-2 rounded-lg bg-red-500/10 border border-red-500/20 text-red-300 text-sm animate-scale-in">
+        <div className="mb-4 px-4 py-2 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm animate-scale-in">
           {error}
         </div>
       )}
@@ -113,8 +113,8 @@ export default function Home() {
             >
               <div className="flex items-center justify-between">
                 <div>
-                  <h2 className="text-xl font-bold text-white mb-1">Create Game</h2>
-                  <p className="text-gray-400 text-sm">Start a new room</p>
+                  <h2 className="text-xl font-bold text-gray-800 mb-1">Create Game</h2>
+                  <p className="text-gray-500 text-sm">Start a new room</p>
                 </div>
                 <div className="text-3xl group-hover:scale-110 transition-transform duration-300">
                   🎮
@@ -129,8 +129,8 @@ export default function Home() {
             >
               <div className="flex items-center justify-between">
                 <div>
-                  <h2 className="text-xl font-bold text-white mb-1">Join Game</h2>
-                  <p className="text-gray-400 text-sm">Enter a room code</p>
+                  <h2 className="text-xl font-bold text-gray-800 mb-1">Join Game</h2>
+                  <p className="text-gray-500 text-sm">Enter a room code</p>
                 </div>
                 <div className="text-3xl group-hover:scale-110 transition-transform duration-300">
                   🚀
@@ -144,14 +144,14 @@ export default function Home() {
           <div className="glass-card-strong p-6 animate-scale-in">
             <button
               onClick={() => { setMode(null); clearError(); }}
-              className="text-gray-400 hover:text-white text-sm mb-4 flex items-center gap-1 transition-colors"
+              className="text-gray-400 hover:text-gray-700 text-sm mb-4 flex items-center gap-1 transition-colors"
             >
               ← Back
             </button>
-            <h2 className="text-xl font-bold text-white mb-4">Create a Game</h2>
+            <h2 className="text-xl font-bold text-gray-800 mb-4">Create a Game</h2>
             <div className="space-y-3">
               <div>
-                <label className="text-xs text-gray-400 uppercase tracking-wider font-semibold mb-1 block">
+                <label className="text-xs text-gray-500 uppercase tracking-wider font-semibold mb-1 block">
                   Your Name
                 </label>
                 <input
@@ -160,16 +160,16 @@ export default function Home() {
                   onChange={handleNameChange(setCreateName)}
                   placeholder="Enter your name"
                   maxLength={12}
-                  className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/30 transition-all text-base"
+                  className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-gray-800 placeholder-gray-400 focus:outline-none focus:border-accent/50 focus:ring-1 focus:ring-accent/20 transition-all text-base"
                   onKeyDown={(e) => e.key === 'Enter' && handleCreate()}
                   autoFocus
                 />
-                <p className="text-[10px] text-gray-500 mt-1">2-12 characters</p>
+                <p className="text-[10px] text-gray-400 mt-1">2-12 characters</p>
               </div>
               <button
                 onClick={handleCreate}
                 disabled={!createName.trim() || createName.trim().length < 2 || !connected}
-                className="w-full py-3.5 rounded-xl font-bold text-white bg-gradient-to-r from-accent to-accent-light hover:shadow-lg hover:shadow-accent/25 transition-all duration-300 disabled:opacity-30 disabled:cursor-not-allowed active:scale-[0.98]"
+                className="w-full py-3.5 rounded-xl font-bold text-white bg-gradient-to-r from-accent to-accent-light hover:shadow-lg hover:shadow-accent/20 transition-all duration-300 disabled:opacity-30 disabled:cursor-not-allowed active:scale-[0.98]"
               >
                 Create Room
               </button>
@@ -181,14 +181,14 @@ export default function Home() {
           <div className="glass-card-strong p-6 animate-scale-in">
             <button
               onClick={() => { setMode(null); clearError(); }}
-              className="text-gray-400 hover:text-white text-sm mb-4 flex items-center gap-1 transition-colors"
+              className="text-gray-400 hover:text-gray-700 text-sm mb-4 flex items-center gap-1 transition-colors"
             >
               ← Back
             </button>
-            <h2 className="text-xl font-bold text-white mb-4">Join a Game</h2>
+            <h2 className="text-xl font-bold text-gray-800 mb-4">Join a Game</h2>
             <div className="space-y-3">
               <div>
-                <label className="text-xs text-gray-400 uppercase tracking-wider font-semibold mb-1 block">
+                <label className="text-xs text-gray-500 uppercase tracking-wider font-semibold mb-1 block">
                   Room Code
                 </label>
                 <input
@@ -197,12 +197,12 @@ export default function Home() {
                   onChange={handleCodeChange}
                   placeholder="ABCD"
                   maxLength={4}
-                  className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-center text-2xl font-mono tracking-[0.3em] placeholder-gray-600 focus:outline-none focus:border-neon-blue/50 focus:ring-1 focus:ring-neon-blue/30 transition-all uppercase"
+                  className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-gray-800 text-center text-2xl font-mono tracking-[0.3em] placeholder-gray-300 focus:outline-none focus:border-neon-blue/50 focus:ring-1 focus:ring-neon-blue/20 transition-all uppercase"
                   autoFocus
                 />
               </div>
               <div>
-                <label className="text-xs text-gray-400 uppercase tracking-wider font-semibold mb-1 block">
+                <label className="text-xs text-gray-500 uppercase tracking-wider font-semibold mb-1 block">
                   Your Name
                 </label>
                 <input
@@ -211,10 +211,10 @@ export default function Home() {
                   onChange={handleNameChange(setName)}
                   placeholder="Enter your name"
                   maxLength={12}
-                  className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-neon-blue/50 focus:ring-1 focus:ring-neon-blue/30 transition-all text-base"
+                  className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-gray-800 placeholder-gray-400 focus:outline-none focus:border-neon-blue/50 focus:ring-1 focus:ring-neon-blue/20 transition-all text-base"
                   onKeyDown={(e) => e.key === 'Enter' && handleJoin()}
                 />
-                <p className="text-[10px] text-gray-500 mt-1">2-12 characters</p>
+                <p className="text-[10px] text-gray-400 mt-1">2-12 characters</p>
               </div>
               <button
                 onClick={handleJoin}
@@ -224,7 +224,7 @@ export default function Home() {
                   name.trim().length < 2 ||
                   !connected
                 }
-                className="w-full py-3.5 rounded-xl font-bold text-white bg-gradient-to-r from-neon-blue to-neon-purple hover:shadow-lg hover:shadow-neon-blue/25 transition-all duration-300 disabled:opacity-30 disabled:cursor-not-allowed active:scale-[0.98]"
+                className="w-full py-3.5 rounded-xl font-bold text-white bg-gradient-to-r from-neon-blue to-neon-purple hover:shadow-lg hover:shadow-neon-blue/20 transition-all duration-300 disabled:opacity-30 disabled:cursor-not-allowed active:scale-[0.98]"
               >
                 Join Room
               </button>

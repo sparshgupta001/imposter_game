@@ -22,10 +22,10 @@ function ToastOverlay() {
             toast.exiting ? 'toast-exit' : 'toast-enter'
           } ${
             toast.type === 'warning'
-              ? 'bg-yellow-500/20 border border-yellow-500/30 text-yellow-200'
+              ? 'bg-yellow-100 border border-yellow-300 text-yellow-800'
               : toast.type === 'error'
-              ? 'bg-red-500/20 border border-red-500/30 text-red-200'
-              : 'bg-neon-blue/10 border border-neon-blue/30 text-neon-blue'
+              ? 'bg-red-100 border border-red-300 text-red-800'
+              : 'bg-blue-50 border border-blue-200 text-blue-700'
           }`}
           style={{ backdropFilter: 'blur(12px)' }}
         >
@@ -46,7 +46,7 @@ function ConnectionIndicator() {
           connected ? 'bg-neon-green animate-pulse' : 'bg-red-500'
         }`}
       />
-      <span className="text-[10px] text-gray-500 font-medium uppercase tracking-wider">
+      <span className="text-[10px] text-gray-400 font-medium uppercase tracking-wider">
         {connected ? 'Live' : 'Offline'}
       </span>
     </div>

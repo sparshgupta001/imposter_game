@@ -13,6 +13,13 @@
 - [README.md](file://README.md)
 </cite>
 
+## Update Summary
+**Changes Made**
+- Updated connection configuration section to reflect enhanced WebSocket settings
+- Modified performance considerations to address new transport priority and timeout values
+- Updated troubleshooting guide with new timeout and transport-related guidance
+- Enhanced reconnection logic documentation with infinite retry capabilities
+
 ## Table of Contents
 1. [Introduction](#introduction)
 2. [Project Structure](#project-structure)
@@ -115,9 +122,11 @@ GC-->>UI : "Update UI state"
 The hook encapsulates connection lifecycle and reconnection behavior:
 - Singleton socket: Uses a module-level global to reuse a single Socket.IO instance across renders.
 - Auto-connect and reconnection: Enables automatic reconnection with exponential backoff and polling fallback.
-- Transport selection: Prefers WebSocket with polling as a fallback.
+- Transport selection: **Enhanced** to prioritize polling over WebSocket for improved mobile connectivity reliability.
 - Initial reconnection: On connect, reads room code and player name from session storage and emits a reconnect event to restore state.
 - Lifecycle cleanup: Removes event listeners on unmount.
+
+**Updated** Enhanced connection configuration with infinite reconnection attempts, increased timeout, and transport priority optimization.
 
 ```mermaid
 flowchart TD
@@ -145,6 +154,22 @@ WaitEvents --> Cleanup
 
 **Section sources**
 - [useSocket.js:8-75](file://client/src/hooks/useSocket.js#L8-L75)
+
+### Enhanced Connection Configuration
+The useSocket hook now implements advanced connection settings optimized for reliability and mobile connectivity:
+
+**Connection Settings:**
+- `reconnectionAttempts: Infinity` - Infinite reconnection attempts for persistent connectivity
+- `timeout: 20000` - Increased connection timeout from 10,000ms to 20,000ms for better reliability
+- `transports: ['polling', 'websocket']` - Prioritizes polling over WebSocket for improved mobile network support
+
+**Reconnection Strategy:**
+- Exponential backoff with `reconnectionDelay: 1000` and `reconnectionDelayMax: 5000`
+- Automatic reconnection on network interruptions
+- Graceful handling of connection failures
+
+**Section sources**
+- [useSocket.js:21-29](file://client/src/hooks/useSocket.js#L21-L29)
 
 ### GameContext: Event Listeners and Actions
 GameContext wires the socket to UI state:
@@ -276,38 +301,40 @@ J --> K["topics.js"]
 
 ## Performance Considerations
 - Connection pooling: The hook uses a singleton socket to avoid multiple connections and reduce overhead.
-- Transport selection: Prefers WebSocket with polling fallback to minimize latency and improve reliability.
+- **Enhanced** Transport selection: **Prioritizes polling over WebSocket** with increased timeout (20,000ms) for improved mobile connectivity reliability.
 - Memory management: Event listeners are attached and detached in useEffect cleanup to prevent leaks.
 - Efficient broadcasting: Server emits targeted events to rooms and individual sockets to reduce unnecessary traffic.
 - Timer management: Server-side timers are cleared on transitions and room deletion to prevent lingering intervals.
 - UI updates: GameContext batches state updates and uses minimal re-renders by updating only affected slices.
 
-[No sources needed since this section provides general guidance]
+**Updated** The enhanced transport priority and increased timeout values provide better performance over mobile networks while maintaining connection reliability.
 
 ## Troubleshooting Guide
 Common connection issues and solutions:
-- Connection fails or slow:
+- **Connection fails or slow:**
   - Verify VITE_SERVER_URL environment variable points to the deployed server.
   - Check CORS configuration on the server allows client origin.
   - Confirm firewall/proxy settings allow WebSocket and polling traffic.
-- Frequent disconnects:
-  - Review reconnection options (reconnectionAttempts, reconnectionDelay, reconnectionDelayMax).
+  - **New** Verify the increased timeout setting (20,000ms) is sufficient for your network conditions.
+- **Frequent disconnects:**
+  - Review reconnection options (reconnectionAttempts: Infinity, reconnectionDelay: 1000, reconnectionDelayMax: 5000).
   - Ensure client session storage contains roomCode and playerName for seamless reconnection.
-- Reconnection not restoring state:
+  - **New** Monitor transport switching between polling and WebSocket based on network conditions.
+- **Reconnection not restoring state:**
   - Confirm the reconnect event is emitted with correct code and name.
   - Verify server responds with reconnected event containing current game state.
-- Player disappears unexpectedly:
+- **Player disappears unexpectedly:**
   - Server implements a 30-second grace period before removing disconnected players.
   - UI shows playerDisconnected and later playerReconnected when reconnected.
-- Timer anomalies:
+- **Timer anomalies:**
   - Server clears timers on transitions and onEnd triggers phase advancement.
   - Clients rely on timerTick events; ensure UI resets timers on phase changes.
 
-Debugging techniques:
-- Enable Socket.IO debug logs on the client and server.
-- Inspect network tab for WebSocket upgrade and polling fallback.
-- Monitor server logs for room lifecycle and error messages.
-- Use React DevTools to inspect GameContext state and ensure event listeners are attached.
+**New** Debugging techniques for enhanced configuration:
+- Enable Socket.IO debug logs on the client and server to monitor transport switching.
+- Inspect network tab for WebSocket upgrade and polling fallback behavior.
+- Monitor reconnection attempts count to verify infinite retry capability.
+- Observe timeout behavior during connection establishment.
 
 **Section sources**
 - [useSocket.js:21-29](file://client/src/hooks/useSocket.js#L21-L29)
@@ -315,4 +342,4 @@ Debugging techniques:
 - [index.js:542-608](file://server/index.js#L542-L608)
 
 ## Conclusion
-The useSocket hook provides robust, reusable WebSocket connectivity with automatic reconnection and a singleton socket instance. Combined with GameContext’s event-driven state management and the server’s authoritative game state machine, the system delivers a responsive, real-time multiplayer experience. Following the event inventory and troubleshooting steps ensures reliable operation across diverse network conditions.
+The useSocket hook provides robust, reusable WebSocket connectivity with automatic reconnection and a singleton socket instance. **Enhanced** with infinite reconnection attempts, increased timeout, and optimized transport priority, the system delivers improved reliability particularly for mobile connectivity. Combined with GameContext's event-driven state management and the server's authoritative game state machine, the system delivers a responsive, real-time multiplayer experience. Following the event inventory and troubleshooting steps ensures reliable operation across diverse network conditions with the new enhanced connection configuration.

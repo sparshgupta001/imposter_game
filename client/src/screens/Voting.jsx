@@ -19,8 +19,8 @@ function CountdownRing({ timeLeft, totalTime }) {
   const dashOffset = circumference * (1 - progress);
 
   const getColor = () => {
-    if (progress > 0.5) return '#00ff88';
-    if (progress > 0.25) return '#fbbf24';
+    if (progress > 0.5) return '#10b981';
+    if (progress > 0.25) return '#f59e0b';
     return '#e94560';
   };
 
@@ -32,7 +32,7 @@ function CountdownRing({ timeLeft, totalTime }) {
           cy="32"
           r={radius}
           fill="none"
-          stroke="rgba(255,255,255,0.06)"
+          stroke="rgba(0,0,0,0.06)"
           strokeWidth="3"
         />
         <circle
@@ -48,7 +48,7 @@ function CountdownRing({ timeLeft, totalTime }) {
           strokeDashoffset={dashOffset}
         />
       </svg>
-      <span className="absolute text-lg font-bold text-white font-mono">{timeLeft}</span>
+      <span className="absolute text-lg font-bold text-gray-800 font-mono">{timeLeft}</span>
     </div>
   );
 }
@@ -79,8 +79,8 @@ export default function Voting() {
 
       {/* Header */}
       <div className="text-center mb-6 animate-slide-up">
-        <h2 className="text-xl font-bold text-white mb-1">Vote for the Imposter!</h2>
-        <p className="text-gray-400 text-sm">
+        <h2 className="text-xl font-bold text-gray-800 mb-1">Vote for the Imposter!</h2>
+        <p className="text-gray-500 text-sm">
           {hasVoted ? 'Vote locked in ✓' : 'Select who you think is faking it'}
         </p>
       </div>
@@ -106,10 +106,10 @@ export default function Voting() {
               disabled={hasVoted}
               className={`glass-card p-4 flex flex-col items-center gap-2 transition-all duration-200 relative cursor-pointer disabled:cursor-default ${
                 isSelected
-                  ? 'border-accent/60 bg-accent/10 scale-[1.03] shadow-lg shadow-accent/10'
+                  ? 'border-accent/60 bg-accent/5 scale-[1.03] shadow-md shadow-accent/10'
                   : hasVoted
                   ? 'opacity-60'
-                  : 'hover:border-white/15 active:scale-[0.97]'
+                  : 'hover:border-gray-300 active:scale-[0.97]'
               }`}
             >
               {/* Selected ring */}
@@ -119,7 +119,7 @@ export default function Voting() {
 
               {/* Has voted indicator */}
               {hasPlayerVoted && (
-                <div className="absolute top-2 right-2 w-5 h-5 rounded-full bg-neon-green/20 flex items-center justify-center">
+                <div className="absolute top-2 right-2 w-5 h-5 rounded-full bg-emerald-50 flex items-center justify-center">
                   <span className="text-neon-green text-[10px]">✓</span>
                 </div>
               )}
@@ -129,7 +129,7 @@ export default function Voting() {
               >
                 {initials}
               </div>
-              <span className="text-sm text-gray-300 font-medium truncate w-full text-center">
+              <span className="text-sm text-gray-700 font-medium truncate w-full text-center">
                 {player.name}
               </span>
             </button>
@@ -140,7 +140,7 @@ export default function Voting() {
       {/* Vote status */}
       {votedPlayers.length > 0 && (
         <div className="w-full max-w-sm mb-4 animate-fade-in">
-          <p className="text-xs text-gray-500 text-center">
+          <p className="text-xs text-gray-400 text-center">
             {votedPlayers.length}/{players.length} votes locked in
           </p>
         </div>
@@ -154,8 +154,8 @@ export default function Voting() {
             disabled={!selectedId}
             className={`w-full py-4 rounded-xl font-bold text-lg transition-all duration-300 active:scale-[0.98] ${
               selectedId
-                ? 'bg-gradient-to-r from-accent to-accent-light text-white shadow-lg shadow-accent/25 hover:shadow-xl hover:shadow-accent/30'
-                : 'bg-white/5 text-gray-500 cursor-not-allowed'
+                ? 'bg-gradient-to-r from-accent to-accent-light text-white shadow-lg shadow-accent/20 hover:shadow-xl hover:shadow-accent/25'
+                : 'bg-gray-100 text-gray-400 cursor-not-allowed'
             }`}
           >
             {selectedId ? 'Lock In Vote 🔒' : 'Select a player'}
@@ -165,11 +165,11 @@ export default function Voting() {
         <div className="w-full max-w-sm mt-auto text-center animate-scale-in">
           <div className="glass-card px-5 py-4">
             <p className="text-neon-green font-semibold text-sm">Vote Locked In ✓</p>
-            <p className="text-gray-500 text-xs mt-1">Waiting for others...</p>
+            <p className="text-gray-400 text-xs mt-1">Waiting for others...</p>
             <div className="thinking-dots flex justify-center gap-1 mt-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-gray-500 inline-block" />
-              <span className="w-1.5 h-1.5 rounded-full bg-gray-500 inline-block" />
-              <span className="w-1.5 h-1.5 rounded-full bg-gray-500 inline-block" />
+              <span className="w-1.5 h-1.5 rounded-full bg-gray-400 inline-block" />
+              <span className="w-1.5 h-1.5 rounded-full bg-gray-400 inline-block" />
+              <span className="w-1.5 h-1.5 rounded-full bg-gray-400 inline-block" />
             </div>
           </div>
         </div>

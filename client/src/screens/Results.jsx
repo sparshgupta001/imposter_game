@@ -62,14 +62,14 @@ function fireConfetti() {
       angle: 60,
       spread: 55,
       origin: { x: 0, y: 0.7 },
-      colors: ['#e94560', '#00ff88', '#00d4ff', '#a855f7', '#fbbf24'],
+      colors: ['#e94560', '#10b981', '#3b82f6', '#8b5cf6', '#f59e0b'],
     });
     confetti({
       particleCount: 3,
       angle: 120,
       spread: 55,
       origin: { x: 1, y: 0.7 },
-      colors: ['#e94560', '#00ff88', '#00d4ff', '#a855f7', '#fbbf24'],
+      colors: ['#e94560', '#10b981', '#3b82f6', '#8b5cf6', '#f59e0b'],
     });
 
     if (Date.now() < end) {
@@ -85,14 +85,14 @@ function fireBigConfetti() {
     particleCount: 150,
     spread: 100,
     origin: { y: 0.5 },
-    colors: ['#e94560', '#00ff88', '#00d4ff', '#a855f7', '#fbbf24', '#ec4899'],
+    colors: ['#e94560', '#10b981', '#3b82f6', '#8b5cf6', '#f59e0b', '#ec4899'],
   });
   setTimeout(() => {
     confetti({
       particleCount: 100,
       spread: 120,
       origin: { y: 0.4 },
-      colors: ['#e94560', '#00ff88', '#00d4ff', '#a855f7'],
+      colors: ['#e94560', '#10b981', '#3b82f6', '#8b5cf6'],
     });
   }, 300);
 }
@@ -168,23 +168,23 @@ export default function Results() {
           <h1
             className="text-4xl font-black mb-2"
             style={{
-              background: 'linear-gradient(135deg, #e94560, #a855f7, #00d4ff)',
+              background: 'linear-gradient(135deg, #e94560, #8b5cf6, #3b82f6)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
             }}
           >
             GAME OVER
           </h1>
-          <p className="text-gray-400 text-sm">Final Standings</p>
+          <p className="text-gray-500 text-sm">Final Standings</p>
         </div>
 
         {/* Winner */}
         {winner && (
           <div className="glass-card-strong p-6 text-center mb-6 w-full max-w-sm animate-scale-in glow-blue">
             <div className="text-5xl mb-3">👑</div>
-            <h2 className="text-2xl font-black text-white mb-1">{winner.name}</h2>
+            <h2 className="text-2xl font-black text-gray-800 mb-1">{winner.name}</h2>
             <p className="text-neon-blue text-sm font-semibold">Winner!</p>
-            <p className="text-3xl font-black text-white mt-2">{winner.score || 0} pts</p>
+            <p className="text-3xl font-black text-gray-800 mt-2">{winner.score || 0} pts</p>
           </div>
         )}
 
@@ -204,21 +204,21 @@ export default function Results() {
               <div
                 key={player.id || i}
                 className={`glass-card px-4 py-3 flex items-center gap-3 ${
-                  i === 0 ? 'border-neon-blue/30 bg-neon-blue/5' : ''
+                  i === 0 ? 'border-blue-200 bg-blue-50/50' : ''
                 }`}
               >
                 <span className={`text-sm font-bold w-6 text-center ${
-                  i === 0 ? 'text-neon-blue' : i === 1 ? 'text-gray-300' : i === 2 ? 'text-yellow-600' : 'text-gray-500'
+                  i === 0 ? 'text-neon-blue' : i === 1 ? 'text-gray-500' : i === 2 ? 'text-yellow-600' : 'text-gray-400'
                 }`}>
                   {i === 0 ? '👑' : `#${i + 1}`}
                 </span>
                 <div className={`w-9 h-9 rounded-full bg-gradient-to-br ${colorClass} flex items-center justify-center text-white font-bold text-xs shadow-md flex-shrink-0`}>
                   {initials}
                 </div>
-                <span className="text-sm text-white font-medium flex-1 truncate">
+                <span className="text-sm text-gray-800 font-medium flex-1 truncate">
                   {player.name}
                 </span>
-                <span className="text-sm font-bold text-white">{player.score || 0}</span>
+                <span className="text-sm font-bold text-gray-800">{player.score || 0}</span>
               </div>
             );
           })}
@@ -229,14 +229,14 @@ export default function Results() {
           {isHost && (
             <button
               onClick={playAgain}
-              className="w-full py-4 rounded-xl font-bold text-lg bg-gradient-to-r from-accent to-accent-light text-white shadow-lg shadow-accent/25 hover:shadow-xl hover:shadow-accent/30 transition-all duration-300 active:scale-[0.98]"
+              className="w-full py-4 rounded-xl font-bold text-lg bg-gradient-to-r from-accent to-accent-light text-white shadow-lg shadow-accent/20 hover:shadow-xl hover:shadow-accent/25 transition-all duration-300 active:scale-[0.98]"
             >
               Play Again 🔄
             </button>
           )}
           <button
             onClick={leaveGame}
-            className="w-full py-3 rounded-xl font-medium text-sm bg-white/5 text-gray-400 hover:text-white hover:bg-white/10 transition-all duration-300"
+            className="w-full py-3 rounded-xl font-medium text-sm bg-gray-100 text-gray-500 hover:text-gray-800 hover:bg-gray-200 transition-all duration-300"
           >
             Leave Game
           </button>
@@ -249,13 +249,13 @@ export default function Results() {
   return (
     <div className="w-full h-full flex flex-col items-center px-6 py-8 overflow-y-auto">
       {/* Round Indicator */}
-      <div className="text-xs text-gray-500 font-medium mb-4 animate-fade-in">
+      <div className="text-xs text-gray-400 font-medium mb-4 animate-fade-in">
         Round {currentRound}/{totalRounds}
       </div>
 
       {/* Vote Reveal */}
       <div className="w-full max-w-sm mb-6">
-        <h3 className="text-xs text-gray-400 uppercase tracking-wider font-semibold mb-3 animate-fade-in">
+        <h3 className="text-xs text-gray-500 uppercase tracking-wider font-semibold mb-3 animate-fade-in">
           Votes
         </h3>
         <div className="space-y-2">
@@ -268,9 +268,9 @@ export default function Results() {
                   isRevealed ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-4'
                 }`}
               >
-                <span className="text-sm text-gray-300">{vote.voterName}</span>
+                <span className="text-sm text-gray-700">{vote.voterName}</span>
                 <div className="flex items-center gap-1.5">
-                  <span className="text-[10px] text-gray-500">voted</span>
+                  <span className="text-[10px] text-gray-400">voted</span>
                   <span className="text-sm text-accent font-semibold">{vote.targetName}</span>
                 </div>
               </div>
@@ -282,7 +282,7 @@ export default function Results() {
       {/* Imposter Reveal */}
       {revealStep >= 1 && (
         <div className="w-full max-w-sm text-center mb-4 animate-fade-in">
-          <p className="text-gray-400 text-sm mb-2">The imposter was...</p>
+          <p className="text-gray-500 text-sm mb-2">The imposter was...</p>
         </div>
       )}
 
@@ -300,7 +300,7 @@ export default function Results() {
               className="text-2xl font-black mb-2"
               style={{
                 background: caught
-                  ? 'linear-gradient(135deg, #00ff88, #00d4ff)'
+                  ? 'linear-gradient(135deg, #10b981, #3b82f6)'
                   : 'linear-gradient(135deg, #e94560, #ff6b81)',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
@@ -312,8 +312,8 @@ export default function Results() {
               {caught ? 'CAUGHT! 🎉' : 'ESCAPED! 😈'}
             </p>
             {actualTopic && (
-              <p className="text-gray-400 text-xs mt-2">
-                The word was: <span className="text-white font-semibold">{actualTopic}</span>
+              <p className="text-gray-500 text-xs mt-2">
+                The word was: <span className="text-gray-800 font-semibold">{actualTopic}</span>
               </p>
             )}
           </div>
@@ -324,7 +324,7 @@ export default function Results() {
       {revealStep >= 2 && caught && isImposter && !guessSubmitted && !imposterGuessResult && (
         <div className="w-full max-w-sm mb-6 animate-slide-up">
           <div className="glass-card p-4">
-            <p className="text-sm text-gray-300 mb-3 text-center">
+            <p className="text-sm text-gray-600 mb-3 text-center">
               Guess the word for <span className="text-neon-green font-bold">+1 point!</span>
             </p>
             <div className="flex gap-2">
@@ -333,7 +333,7 @@ export default function Results() {
                 value={imposterGuess}
                 onChange={(e) => setImposterGuess(e.target.value.slice(0, 30))}
                 placeholder="Your guess..."
-                className="flex-1 bg-white/5 border border-white/10 rounded-xl px-3 py-2.5 text-white placeholder-gray-600 focus:outline-none focus:border-accent/50 text-sm"
+                className="flex-1 bg-white border border-gray-200 rounded-xl px-3 py-2.5 text-gray-800 placeholder-gray-400 focus:outline-none focus:border-accent/50 text-sm"
                 onKeyDown={(e) => e.key === 'Enter' && handleGuessSubmit()}
                 autoFocus
               />
@@ -353,7 +353,7 @@ export default function Results() {
       {(guessSubmitted || imposterGuessResult) && (
         <div className="w-full max-w-sm mb-6 animate-scale-in">
           <div className={`glass-card p-4 text-center ${
-            imposterGuessResult?.correct ? 'glow-green' : 'border-red-500/20'
+            imposterGuessResult?.correct ? 'glow-green' : 'border-red-200'
           }`}>
             <p className={`text-sm font-semibold ${
               imposterGuessResult?.correct ? 'text-neon-green' : imposterGuessResult ? 'text-accent' : 'text-gray-400'
@@ -371,7 +371,7 @@ export default function Results() {
       {/* Scoreboard */}
       {revealStep >= 2 && (
         <div className="w-full max-w-sm mb-6 animate-slide-up" style={{ animationDelay: '0.2s' }}>
-          <h3 className="text-xs text-gray-400 uppercase tracking-wider font-semibold mb-3">
+          <h3 className="text-xs text-gray-500 uppercase tracking-wider font-semibold mb-3">
             Scoreboard
           </h3>
           <div className="space-y-2">
@@ -391,19 +391,19 @@ export default function Results() {
                   key={player.id || i}
                   className="glass-card px-4 py-3 flex items-center gap-3"
                 >
-                  <span className="text-xs text-gray-500 font-bold w-5 text-center">
+                  <span className="text-xs text-gray-400 font-bold w-5 text-center">
                     {i + 1}
                   </span>
                   <div className={`w-8 h-8 rounded-full bg-gradient-to-br ${colorClass} flex items-center justify-center text-white font-bold text-[10px] shadow-md flex-shrink-0`}>
                     {initials}
                   </div>
-                  <span className="text-sm text-white font-medium flex-1 truncate">
+                  <span className="text-sm text-gray-800 font-medium flex-1 truncate">
                     {player.name}
                   </span>
                   {scoreChange > 0 && (
                     <span className="text-xs text-neon-green font-bold mr-2">+{scoreChange}</span>
                   )}
-                  <span className="text-sm font-bold text-white">{player.score || 0}</span>
+                  <span className="text-sm font-bold text-gray-800">{player.score || 0}</span>
                 </div>
               );
             })}
@@ -417,14 +417,14 @@ export default function Results() {
           {currentRound >= totalRounds ? (
             <button
               onClick={nextRound}
-              className="w-full py-4 rounded-xl font-bold text-lg bg-gradient-to-r from-neon-purple to-neon-pink text-white shadow-lg shadow-neon-purple/25 hover:shadow-xl transition-all duration-300 active:scale-[0.98]"
+              className="w-full py-4 rounded-xl font-bold text-lg bg-gradient-to-r from-neon-purple to-neon-pink text-white shadow-lg shadow-neon-purple/20 hover:shadow-xl transition-all duration-300 active:scale-[0.98]"
             >
               Final Results 🏆
             </button>
           ) : (
             <button
               onClick={nextRound}
-              className="w-full py-4 rounded-xl font-bold text-lg bg-gradient-to-r from-accent to-accent-light text-white shadow-lg shadow-accent/25 hover:shadow-xl hover:shadow-accent/30 transition-all duration-300 active:scale-[0.98]"
+              className="w-full py-4 rounded-xl font-bold text-lg bg-gradient-to-r from-accent to-accent-light text-white shadow-lg shadow-accent/20 hover:shadow-xl hover:shadow-accent/25 transition-all duration-300 active:scale-[0.98]"
             >
               Next Round →
             </button>
@@ -434,7 +434,7 @@ export default function Results() {
 
       {revealStep >= 2 && !isHost && (
         <div className="w-full max-w-sm mt-auto text-center animate-fade-in">
-          <p className="text-gray-500 text-sm">Waiting for host...</p>
+          <p className="text-gray-400 text-sm">Waiting for host...</p>
         </div>
       )}
     </div>

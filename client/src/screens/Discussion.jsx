@@ -8,8 +8,8 @@ function CountdownRing({ timeLeft, totalTime }) {
   const dashOffset = circumference * (1 - progress);
 
   const getColor = () => {
-    if (progress > 0.5) return '#00ff88';
-    if (progress > 0.25) return '#fbbf24';
+    if (progress > 0.5) return '#10b981';
+    if (progress > 0.25) return '#f59e0b';
     return '#e94560';
   };
 
@@ -21,7 +21,7 @@ function CountdownRing({ timeLeft, totalTime }) {
           cy="48"
           r={radius}
           fill="none"
-          stroke="rgba(255,255,255,0.06)"
+          stroke="rgba(0,0,0,0.06)"
           strokeWidth="4"
         />
         <circle
@@ -37,7 +37,7 @@ function CountdownRing({ timeLeft, totalTime }) {
           strokeDashoffset={dashOffset}
         />
       </svg>
-      <span className="absolute text-2xl font-bold text-white font-mono">{timeLeft}</span>
+      <span className="absolute text-2xl font-bold text-gray-800 font-mono">{timeLeft}</span>
     </div>
   );
 }
@@ -55,8 +55,8 @@ export default function Discussion() {
 
       {/* Header */}
       <div className="text-center mb-6 animate-slide-up">
-        <h2 className="text-2xl font-bold text-white mb-1">Discuss! 🗣️</h2>
-        <p className="text-gray-400 text-sm">Who is the imposter?</p>
+        <h2 className="text-2xl font-bold text-gray-800 mb-1">Discuss! 🗣️</h2>
+        <p className="text-gray-500 text-sm">Who is the imposter?</p>
       </div>
 
       {/* Animated speaking indicator */}
@@ -74,7 +74,7 @@ export default function Discussion() {
 
       {/* Clues Reference */}
       <div className="w-full max-w-sm animate-slide-up" style={{ animationDelay: '0.1s' }}>
-        <h3 className="text-xs text-gray-400 uppercase tracking-wider font-semibold mb-3">
+        <h3 className="text-xs text-gray-500 uppercase tracking-wider font-semibold mb-3">
           Submitted Clues
         </h3>
         <div className="space-y-2 stagger-children">
@@ -82,10 +82,10 @@ export default function Discussion() {
             const player = players.find((p) => p.id === clue.playerId);
             return (
               <div key={clue.playerId} className="glass-card px-4 py-3 flex items-center justify-between">
-                <span className="text-sm text-gray-300 font-medium">
+                <span className="text-sm text-gray-700 font-medium">
                   {player?.name || clue.playerName}
                 </span>
-                <span className="text-white font-bold text-sm">{clue.clue}</span>
+                <span className="text-gray-800 font-bold text-sm">{clue.clue}</span>
               </div>
             );
           })}
@@ -93,7 +93,7 @@ export default function Discussion() {
 
         {clues.length === 0 && (
           <div className="glass-card p-6 text-center">
-            <p className="text-gray-500 text-sm">No clues yet</p>
+            <p className="text-gray-400 text-sm">No clues yet</p>
           </div>
         )}
       </div>
@@ -101,10 +101,10 @@ export default function Discussion() {
       {/* Instruction */}
       <div className="mt-auto pt-6 text-center animate-fade-in">
         <div className="glass-card px-5 py-3 inline-block">
-          <p className="text-gray-300 text-sm">
+          <p className="text-gray-600 text-sm">
             Talk it out with your group! 
             <br />
-            <span className="text-gray-500 text-xs">Voting starts when the timer ends</span>
+            <span className="text-gray-400 text-xs">Voting starts when the timer ends</span>
           </p>
         </div>
       </div>

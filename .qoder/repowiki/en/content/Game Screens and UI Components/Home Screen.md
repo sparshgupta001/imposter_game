@@ -13,6 +13,13 @@
 - [gameManager.js](file://server/gameManager.js)
 </cite>
 
+## Update Summary
+**Changes Made**
+- Enhanced connection status display system with improved user interface
+- Added informative connection status messages and troubleshooting guidance
+- Implemented prominent retry button for better user experience during connection issues
+- Updated connection status indicators and error messaging system documentation
+
 ## Table of Contents
 1. [Introduction](#introduction)
 2. [Project Structure](#project-structure)
@@ -25,7 +32,7 @@
 9. [Conclusion](#conclusion)
 
 ## Introduction
-This document provides comprehensive documentation for the Home screen component, focusing on room creation and joining functionality, form validation, input sanitization, error handling, animated background elements, responsive design, button interactions, state management for mode switching, connection status indicators, error messaging system, keyboard navigation support, styling approach using Tailwind CSS classes and custom animations, and examples of form validation logic and user interaction patterns.
+This document provides comprehensive documentation for the Home screen component, focusing on room creation and joining functionality, form validation, input sanitization, error handling, animated background elements, responsive design, button interactions, state management for mode switching, enhanced connection status indicators with improved user interface, error messaging system, keyboard navigation support, styling approach using Tailwind CSS classes and custom animations, and examples of form validation logic and user interaction patterns.
 
 ## Project Structure
 The Home screen resides in the client application under the screens directory and integrates with the GameContext for state management and useSocket for WebSocket connectivity. The server-side logic handles room creation, joining, and emits events consumed by the client.
@@ -57,7 +64,7 @@ A --> G
 
 **Diagram sources**
 - [App.jsx:1-101](file://client/src/App.jsx#L1-L101)
-- [Home.jsx:1-231](file://client/src/screens/Home.jsx#L1-L231)
+- [Home.jsx:1-238](file://client/src/screens/Home.jsx#L1-L238)
 - [GameContext.jsx:1-383](file://client/src/context/GameContext.jsx#L1-L383)
 - [useSocket.js:1-76](file://client/src/hooks/useSocket.js#L1-L76)
 - [index.css:1-215](file://client/src/index.css#L1-L215)
@@ -67,7 +74,7 @@ A --> G
 - [gameManager.js:1-636](file://server/gameManager.js#L1-L636)
 
 **Section sources**
-- [Home.jsx:1-231](file://client/src/screens/Home.jsx#L1-L231)
+- [Home.jsx:1-238](file://client/src/screens/Home.jsx#L1-L238)
 - [GameContext.jsx:12-383](file://client/src/context/GameContext.jsx#L12-L383)
 - [useSocket.js:8-76](file://client/src/hooks/useSocket.js#L8-L76)
 - [App.jsx:67-101](file://client/src/App.jsx#L67-L101)
@@ -78,7 +85,7 @@ A --> G
 - [gameManager.js:53-136](file://server/gameManager.js#L53-L136)
 
 ## Core Components
-- Home screen component manages two primary modes: create and join. It renders floating emoji backgrounds, glow orbs, connection status indicator, error messages, and interactive cards for room actions.
+- Home screen component manages two primary modes: create and join. It renders floating emoji backgrounds, glow orbs, enhanced connection status indicator with retry button, error messages, and interactive cards for room actions.
 - GameContext provides centralized state and actions for room creation, joining, and error handling, along with socket connection state.
 - useSocket encapsulates WebSocket connection logic, reconnection behavior, and connection status updates.
 - Tailwind CSS and custom animations define the visual presentation and motion effects.
@@ -89,11 +96,12 @@ Key responsibilities:
 - Animated background elements with floating emojis and glow effects.
 - Responsive design using Tailwind utilities and custom animations.
 - Keyboard navigation support via Enter key handling.
-- Error messaging system with automatic timeouts and clear controls.
+- Enhanced error messaging system with automatic timeouts and clear controls.
+- Improved connection status indicators with retry functionality and troubleshooting guidance.
 - Connection status indicators and reconnection handling.
 
 **Section sources**
-- [Home.jsx:12-231](file://client/src/screens/Home.jsx#L12-L231)
+- [Home.jsx:12-238](file://client/src/screens/Home.jsx#L12-L238)
 - [GameContext.jsx:12-383](file://client/src/context/GameContext.jsx#L12-L383)
 - [useSocket.js:8-76](file://client/src/hooks/useSocket.js#L8-L76)
 - [index.css:111-215](file://client/src/index.css#L111-L215)
@@ -142,12 +150,21 @@ The Home screen implements:
 - Floating emoji background elements with randomized positions, delays, and durations.
 - Glow orbs for ambient visual enhancement.
 - Title with gradient text and drop shadow.
-- Connection warning banner when offline.
+- **Enhanced connection warning banner** with retry button and troubleshooting guidance when offline.
 - Error banner with automatic dismissal.
 - Mode switching between create and join views.
 - Form validation and sanitization for inputs.
 - Keyboard navigation support via Enter key.
 - Responsive design using Tailwind utilities and custom animations.
+
+**Enhanced Connection Status Display System**:
+The connection status display has been significantly improved with:
+- Informative connection status messages explaining the connection state
+- Troubleshooting guidance for common connection issues
+- Prominent retry button with clear visual hierarchy
+- Animated fade-in transition for better user experience
+- Color-coded styling with red accents for visibility
+- Proper spacing and typography for readability
 
 Form validation and sanitization:
 - Create mode validates name length (minimum 2 characters) and trims whitespace before submission.
@@ -167,6 +184,7 @@ Button interactions:
 - Create Game button triggers createRoom action when connected and name is valid.
 - Join Game button triggers joinRoom action when connected and inputs are valid.
 - Back buttons reset mode and clear error state.
+- **Retry button** triggers page reload for immediate connection recovery.
 
 Keyboard navigation:
 - Enter key triggers form submission for both create and join forms.
@@ -179,9 +197,11 @@ Animated background elements:
 - Floating emojis: randomized top/left/right/bottom positioning, animation delay, and duration.
 - Glow orbs: positioned absolute with blur effects and pointer-events disabled.
 
-Connection status indicators:
-- Connection warning appears when connected is false.
-- Global connection indicator in App.jsx shows live/offline status.
+**Enhanced Connection Status Indicators**:
+- Connection warning appears when connected is false with improved styling and messaging.
+- Global connection indicator in App.jsx shows live/offline status with pulsing animation.
+- Retry button provides immediate action for users experiencing connection issues.
+- Troubleshooting guidance helps users understand and resolve connection problems.
 
 Error messaging system:
 - Error banners display server-reported errors with automatic timeout clearing.
@@ -191,9 +211,10 @@ Styling approach:
 - Tailwind utilities for layout, colors, borders, shadows, and transitions.
 - Custom animations defined in tailwind.config.js and index.css for floating, glowing, fading, and scaling effects.
 - Gradient text and drop shadow for title emphasis.
+- Enhanced glass card styling with improved backdrop-filter effects.
 
 **Section sources**
-- [Home.jsx:12-231](file://client/src/screens/Home.jsx#L12-L231)
+- [Home.jsx:12-238](file://client/src/screens/Home.jsx#L12-L238)
 - [index.css:111-215](file://client/src/index.css#L111-L215)
 - [tailwind.config.js:10-43](file://client/tailwind.config.js#L10-L43)
 
@@ -271,19 +292,25 @@ Back navigation:
 **Section sources**
 - [Home.jsx:100-134](file://client/src/screens/Home.jsx#L100-L134)
 - [Home.jsx:136-171](file://client/src/screens/Home.jsx#L136-L171)
-- [Home.jsx:173-226](file://client/src/screens/Home.jsx#L173-L226)
+- [Home.jsx:173-238](file://client/src/screens/Home.jsx#L173-L238)
 
-### Connection Status Indicators and Error Messaging
-Connection indicator:
-- Live/offline dot with label in App.jsx overlay.
-- Reflects useSocket connected state.
+### Enhanced Connection Status Indicators and Error Messaging
+**Enhanced Connection Indicator**:
+- **New connection warning banner** appears when connected is false with improved styling.
+- **Informative messaging** explains "Connecting to server..." and provides troubleshooting guidance.
+- **Prominent retry button** with clear visual hierarchy and hover effects.
+- **Animated fade-in transition** for better user experience.
+- **Color-coded styling** with red accents for visibility and urgency.
 
-Error messaging:
-- Error banner displays server-reported messages.
-- Automatic timeout clears errors after 5 seconds.
+**Connection Indicator**:
+- Live/offline dot with label in App.jsx overlay using pulsing animation.
+- Reflects useSocket connected state with neon green pulse for live connections.
+
+**Error Messaging**:
+- Error banner displays server-reported messages with automatic timeout clearing.
 - Manual clear via clearError resets state and cancels timeouts.
 
-Reconnection:
+**Reconnection**:
 - useSocket attempts reconnection with exponential backoff.
 - On connect, App.jsx sends reconnect event with stored room code and name.
 
@@ -326,7 +353,7 @@ Gradient text:
 - Linear gradient applied to title text with WebkitBackgroundClip and filter.
 
 **Section sources**
-- [Home.jsx:42-229](file://client/src/screens/Home.jsx#L42-L229)
+- [Home.jsx:42-238](file://client/src/screens/Home.jsx#L42-L238)
 - [index.css:111-215](file://client/src/index.css#L111-L215)
 - [tailwind.config.js:10-43](file://client/tailwind.config.js#L10-L43)
 
@@ -341,6 +368,7 @@ User interaction patterns:
 - Input sanitization occurs on change; errors cleared on subsequent changes.
 - Disabled states prevent invalid submissions until conditions are met.
 - Enter key triggers submission for both forms.
+- **Retry button provides immediate action for connection recovery**.
 
 **Section sources**
 - [Home.jsx:19-28](file://client/src/screens/Home.jsx#L19-L28)
@@ -360,16 +388,16 @@ H --> TW["tailwind.config.js"]
 ```
 
 **Diagram sources**
-- [Home.jsx:12-231](file://client/src/screens/Home.jsx#L12-L231)
+- [Home.jsx:12-238](file://client/src/screens/Home.jsx#L12-L238)
 - [GameContext.jsx:12-383](file://client/src/context/GameContext.jsx#L12-L383)
 - [useSocket.js:8-76](file://client/src/hooks/useSocket.js#L8-L76)
 - [index.js:173-248](file://server/index.js#L173-L248)
 - [gameManager.js:53-136](file://server/gameManager.js#L53-L136)
-- [index.css:1-215](file://client/src/index.css#L1-215)
+- [index.css:1-215](file://client/src/index.css#L1-L215)
 - [tailwind.config.js:1-48](file://client/tailwind.config.js#L1-L48)
 
 **Section sources**
-- [Home.jsx:12-231](file://client/src/screens/Home.jsx#L12-L231)
+- [Home.jsx:12-238](file://client/src/screens/Home.jsx#L12-L238)
 - [GameContext.jsx:12-383](file://client/src/context/GameContext.jsx#L12-L383)
 - [useSocket.js:8-76](file://client/src/hooks/useSocket.js#L8-L76)
 - [index.js:173-248](file://server/index.js#L173-L248)
@@ -382,6 +410,7 @@ H --> TW["tailwind.config.js"]
 - Input handling: Debounced or throttled input handlers can reduce unnecessary re-renders; current implementation updates on change with minimal overhead.
 - Connection management: useSocket employs reconnection with exponential backoff; ensure server-side reconnection logic avoids duplicate entries.
 - Rendering: Conditional rendering based on mode and connected state minimizes DOM updates.
+- **Enhanced connection status display**: Optimized rendering of connection warnings and retry buttons for better performance.
 
 ## Troubleshooting Guide
 Common issues and resolutions:
@@ -390,6 +419,8 @@ Common issues and resolutions:
 - Inputs not updating: Check input handlers for sanitization and state updates; ensure error clearing on change.
 - Animations not playing: Confirm Tailwind animation utilities are loaded and keyframes are defined; verify CSS is included.
 - Connection indicator stuck offline: Review useSocket connection logic and server-side connection events; check proxy configuration in vite.config.js.
+- **Connection issues with enhanced display**: Use the retry button to immediately attempt reconnection; check network connectivity and server availability.
+- **Connection warning persists**: Review browser console for WebSocket connection errors; verify server is reachable and not blocking connections.
 
 **Section sources**
 - [GameContext.jsx:53-68](file://client/src/context/GameContext.jsx#L53-L68)
@@ -398,4 +429,4 @@ Common issues and resolutions:
 - [vite.config.js:6-15](file://client/vite.config.js#L6-L15)
 
 ## Conclusion
-The Home screen component provides a robust foundation for room creation and joining with comprehensive form validation, input sanitization, error handling, and animated visual enhancements. Its integration with GameContext and useSocket ensures reliable state management and real-time connectivity. The responsive design and keyboard navigation improve accessibility, while the styling approach leverages Tailwind utilities and custom animations for a polished user experience.
+The Home screen component provides a robust foundation for room creation and joining with comprehensive form validation, input sanitization, error handling, and animated visual enhancements. Its integration with GameContext and useSocket ensures reliable state management and real-time connectivity. The **enhanced connection status display system** significantly improves user experience by providing informative connection messages, troubleshooting guidance, and a prominent retry button for better handling of connection issues. The responsive design and keyboard navigation improve accessibility, while the styling approach leverages Tailwind utilities and custom animations for a polished user experience.
