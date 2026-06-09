@@ -134,7 +134,7 @@ function advanceToDiscussion(code) {
 
   gm.startTimer(
     code,
-    60,
+    30,
     (secondsLeft) => {
       io.to(code).emit('timerTick', { secondsLeft });
     },
@@ -617,6 +617,41 @@ io.on('connection', (socket) => {
       console.log(`[Socket] Player "${playerName}" left room ${code}`);
     } catch (err) {
       console.error(`[Socket] leaveRoom error: ${err.message}`);
+      if (typeof callback === 'function') {
+        callback({ success: false, error: err.message });
+      }
+      socket.emit('error', { message: err.message });
+    }
+  });
+
+  // Chat Message
+
+  socket.on('sendChatMessage', (data, callback) => {
+    try {
+      if (!data || !data.message) throw new Error('Message is required');
+
+      const room = gm.getRoomByPlayer(socket.id);
+      if (!room) throw new Error('You are not in a room');
+
+      const player = room.players.get(socket.id);
+      const message = data.message.trim();
+
+      if (message.length > 500) throw new Error('Message is too long');
+      if (message.length === 0) throw new Error('Message cannot be empty');
+
+      // Broadcast message to all players in the room
+      io.to(room.code).emit('chatMessageReceived', {
+        playerId: socket.id,
+        playerName: player ? player.name : 'Unknown',
+        message: message,
+        timestamp: Date.now(),
+      });
+
+      if (typeof callback === 'function') {
+        callback({ success: true });
+      }
+    } catch (err) {
+      console.error(`[Socket] sendChatMessage error: ${err.message}`);
       if (typeof callback === 'function') {
         callback({ success: false, error: err.message });
       }

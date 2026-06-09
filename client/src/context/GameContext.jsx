@@ -33,6 +33,7 @@ export function GameProvider({ children }) {
   const [hasVoted, setHasVoted] = useState(false);
   const [votedPlayers, setVotedPlayers] = useState([]);
   const [imposterGuessResult, setImposterGuessResult] = useState(null);
+  const [chatMessages, setChatMessages] = useState([]);
 
   const toastIdRef = useRef(0);
   const errorTimeoutRef = useRef(null);
@@ -136,17 +137,20 @@ export function GameProvider({ children }) {
       if (data.phase === 'clue') {
         setHasSubmittedClue(false);
         setClues([]);
+        setChatMessages([]);
       }
       if (data.phase === 'voting') {
         setHasVoted(false);
         setVotes({});
         setVotedPlayers([]);
+        setChatMessages([]);
       }
       if (data.phase === 'discussion') {
         if (data.clues) setClues(data.clues);
         setVotes({});
         setVotedPlayers([]);
         setHasVoted(false);
+        setChatMessages([]);
       }
       if (data.round !== undefined) setCurrentRound(data.round);
       if (data.totalRounds !== undefined) setTotalRounds(data.totalRounds);
@@ -243,6 +247,15 @@ export function GameProvider({ children }) {
       }
     };
 
+    const onChatMessageReceived = (data) => {
+      setChatMessages((prev) => [...prev, {
+        playerId: data.playerId,
+        playerName: data.playerName,
+        message: data.message,
+        timestamp: new Date().getTime()
+      }]);
+    };
+
     const onYouAreHost = () => {
       setIsHost(true);
       addToast('You are now the host! 👑');
@@ -266,6 +279,7 @@ export function GameProvider({ children }) {
     socket.on('error', onError);
     socket.on('reconnected', onReconnected);
     socket.on('imposterGuessResult', onImposterGuessResult);
+    socket.on('chatMessageReceived', onChatMessageReceived);
 
     return () => {
       socket.off('roomCreated', onRoomCreated);
@@ -286,6 +300,7 @@ export function GameProvider({ children }) {
       socket.off('error', onError);
       socket.off('reconnected', onReconnected);
       socket.off('imposterGuessResult', onImposterGuessResult);
+      socket.off('chatMessageReceived', onChatMessageReceived);
     };
   }, [socket, addToast, setErrorWithTimeout, rememberPlayerName]);
 
@@ -324,6 +339,11 @@ export function GameProvider({ children }) {
     socket.emit('submitImposterGuess', { guess });
   }, [socket]);
 
+  const sendChatMessage = useCallback((message) => {
+    if (!socket || !message.trim()) return;
+    socket.emit('sendChatMessage', { message: message.trim() });
+  }, [socket]);
+
   const nextRound = useCallback(() => {
     if (!socket) return;
     socket.emit('nextRound');
@@ -344,6 +364,7 @@ export function GameProvider({ children }) {
     setHasVoted(false);
     setVotedPlayers([]);
     setImposterGuessResult(null);
+    setChatMessages([]);
   }, [socket]);
 
   const leaveGame = useCallback(() => {
@@ -369,6 +390,7 @@ export function GameProvider({ children }) {
     setHasVoted(false);
     setVotedPlayers([]);
     setImposterGuessResult(null);
+    setChatMessages([]);
     sessionStorage.removeItem('roomCode');
     sessionStorage.removeItem('playerName');
   }, [socket, roomCode]);
@@ -400,12 +422,14 @@ export function GameProvider({ children }) {
     hasVoted,
     votedPlayers,
     imposterGuessResult,
+    chatMessages,
     createRoom,
     joinRoom,
     startGame,
     submitClue,
     submitVote,
     submitImposterGuess,
+    sendChatMessage,
     nextRound,
     playAgain,
     leaveGame,
