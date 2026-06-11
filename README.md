@@ -448,4 +448,4 @@ Built as an AI-assisted coding contest submission.
 
 ## License
 
-This project is provided for educational and demonstration purposes.
+This project is provided for educational, entertainment and demonstration purposes.
