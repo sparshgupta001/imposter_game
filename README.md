@@ -439,7 +439,7 @@ These improvements were added to improve compatibility across mobile browsers, p
 
 ## Credits
 
-Built as an AI-assisted coding contest submission.
+Built as an AI-assisted coding project submission.
 
 ### Development Assistance
 
