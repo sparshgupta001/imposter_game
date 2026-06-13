@@ -25,6 +25,10 @@ A real-time multiplayer social deduction game built with React, Express, and Soc
 * Automatic player cleanup and room lifecycle management
 * Toast notifications for important game events
 
+## 🔴 Live Demo
+
+👉 [Play Now](https://imposter-game-ten-xi.vercel.app)
+
 ## Tech Stack
 
 ### Frontend
